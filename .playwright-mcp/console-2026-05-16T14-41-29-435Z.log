@@ -1,0 +1,5 @@
+[     603ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8099/favicon.ico:0
+[  931350ms] [LOG] Navigate to quiz | email: qwe@qwe | newsletter: true @ http://localhost:8099/:1196
+[  931827ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://connect.mailerlite.com/api/subscribers:0
+[ 8983694ms] [LOG] Navigate to quiz | email: qwe@qwe | newsletter: false @ http://localhost:8099/:1196
+[ 8991732ms] [LOG] Navigate to quiz | email: qwe@qwe | newsletter: false @ http://localhost:8099/:1196

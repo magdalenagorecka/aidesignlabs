@@ -1,0 +1,45 @@
+- generic [active] [ref=e1]:
+  - dialog "Zanim zaczniesz":
+    - generic:
+      - generic: WYNIK NA EMAIL
+      - heading "Zanim zaczniesz" [level=2]
+      - paragraph: Podaj adres e-mail - wynik quizu trafi prosto do skrzynki. Możesz też zapisać się do newslettera o przyszłości designu.
+      - generic:
+        - generic: Adres e-mail
+        - textbox "Adres e-mail":
+          - /placeholder: twoj@email.pl
+          - text: test@test.pl
+      - generic:
+        - checkbox "Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI"
+        - generic: Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI
+      - button "Przejdź do quizu"
+      - generic:
+        - button "Pomiń, zacznij bez maila"
+  - generic [ref=e122]:
+    - navigation [ref=e123]:
+      - generic [ref=e125]:
+        - link "Jakim AI Designerem będziesz?" [ref=e126] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e127]: Jakim AI Designerem będziesz?
+        - group "Wybor jezyka" [ref=e128]:
+          - button "PL" [ref=e129] [cursor=pointer]
+          - button "EN" [ref=e130] [cursor=pointer]
+    - generic [ref=e132]:
+      - generic [ref=e219]:
+        - generic [ref=e220]: PYTANIE 4 Z 10
+        - generic [ref=e221]: 30%
+      - generic [ref=e224]: NARZĘDZIA I STACK
+      - paragraph [ref=e225]: Co jest Twoim pierwszym wyborem do prototypowania z AI?
+      - generic [ref=e226]:
+        - button "Cursor lub GitHub Copilot - buduję w prawdziwym kodzie" [ref=e227] [cursor=pointer]:
+          - generic [ref=e229]: Cursor lub GitHub Copilot - buduję w prawdziwym kodzie
+        - button "Framer lub Webflow - no-code z integracjami AI" [ref=e230] [cursor=pointer]:
+          - generic [ref=e232]: Framer lub Webflow - no-code z integracjami AI
+        - button "Figma z pluginami AI - szybki prototyp do testów" [ref=e233] [cursor=pointer]:
+          - generic [ref=e235]: Figma z pluginami AI - szybki prototyp do testów
+        - button "Python notebooks - eksperymentuję z modelami" [ref=e236] [cursor=pointer]:
+          - generic [ref=e238]: Python notebooks - eksperymentuję z modelami
+      - generic [ref=e239]:
+        - button "Wstecz" [ref=e240] [cursor=pointer]
+        - button "Dalej" [disabled] [ref=e241]
+      - paragraph [ref=e242]: System dynamicznie dostosowuje kolejne pytania do Twojego profilu

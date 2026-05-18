@@ -1,0 +1,3194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Design Lab - Jakim AI Designerem będziesz?</title>
+<meta name="description" content="Jedyne narzędzie diagnostyczne dla designerów oparte na danych WEF, Autodesk i Figma. 10 pytań, konkretny profil roli i plan kompetencyjny na 3 lata.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Caveat:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   DESIGN TOKENS — Aetheris Insight
+   ============================================================ */
+:root {
+  --primary:           #7055A8;
+  --primary-container: #8B6EC4;
+  --secondary:         #B5637A;
+  --tertiary:          #5E7A4A;
+  --background:        #F3EDE3;
+  --surface:           #FDFAF4;
+  --surface-low:       #EDE7DC;
+  --surface-mid:       #E4DDD1;
+  --surface-high:      #D9D1C3;
+  --on-surface:        #1E1812;
+  --on-surface-var:    #5A5246;
+  --outline:           #9A8E80;
+  --outline-var:       #CEC5B8;
+  --primary-fixed:     #E8E0F5;
+  --solar-yellow:      #AAFF00;
+  --solar-text:        #1A3800;
+  --neon-lime:         #AAFF00;
+  --neon-lime-glow:    rgba(170, 255, 0, 0.38);
+  --ai-indigo:         #7055A8;
+  --inverse-surface:   #2E2318;
+  --inverse-on-surface:#F5EFE5;
+
+  --ff-display:    'Playfair Display', serif;
+  --ff-hand:       'Caveat', cursive;
+  --ff-body:       'Plus Jakarta Sans', sans-serif;
+  --ff-mono:       'JetBrains Mono', monospace;
+
+  --r-sm:   0.21rem;
+  --r:      0.43rem;
+  --r-md:   0.64rem;
+  --r-lg:   0.85rem;
+  --r-xl:   1.28rem;
+  --r-full: 9999px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ff-body);
+  background: var(--background);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .container { padding: 0 64px; }
+}
+
+/* ============================================================
+   NEWSLETTER MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 28, 30, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(107, 56, 212, 0.18);
+  border-radius: var(--r-xl);
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow:
+    0 24px 64px rgba(107, 56, 212, 0.14),
+    0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(107, 56, 212, 0.1), transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.modal-overlay.visible .modal {
+  transform: translateY(0);
+}
+
+@media (min-width: 480px) {
+  .modal { padding: 40px 36px 32px; }
+}
+
+.modal-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ai-indigo);
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--on-surface);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.modal-sub {
+  font-size: 14px;
+  color: var(--on-surface-var);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--on-surface-var);
+  font-family: var(--ff-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.input-email {
+  width: 100%;
+  padding: 11px 15px;
+  border: 1px solid var(--outline-var);
+  border-radius: var(--r-md);
+  font-family: var(--ff-body);
+  font-size: 15px;
+  color: var(--on-surface);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+
+.input-email:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(107, 56, 212, 0.1);
+}
+
+.input-email::placeholder { color: var(--outline); }
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-top: 1px;
+  border: 1.5px solid var(--outline-var);
+  border-radius: var(--r-sm);
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--surface);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.checkbox-input:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkbox-input:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.checkbox-text {
+  font-size: 13px;
+  color: var(--on-surface-var);
+  line-height: 1.55;
+}
+
+.btn-modal-go {
+  display: block;
+  width: 100%;
+  padding: 13px 24px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full);
+  font-family: var(--ff-display);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+  margin-bottom: 10px;
+}
+
+.btn-modal-go:not(:disabled):hover {
+  background: var(--primary-container);
+  transform: translateY(-1px);
+}
+
+.btn-modal-go:not(:disabled):active { transform: scale(0.98); }
+
+.btn-modal-go:disabled {
+  background: var(--surface-high);
+  color: var(--outline);
+  cursor: not-allowed;
+}
+
+.modal-skip-row {
+  text-align: center;
+}
+
+.btn-skip {
+  background: none;
+  border: none;
+  font-family: var(--ff-body);
+  font-size: 13px;
+  color: var(--outline);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.btn-skip:hover { color: var(--on-surface-var); }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(243, 237, 227, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s;
+}
+
+.nav.scrolled { border-bottom-color: var(--outline-var); }
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  gap: 16px;
+}
+
+.nav-logo {
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-logo-main {
+  font-family: var(--ff-display);
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+
+.lang-toggle {
+  display: flex;
+  gap: 3px;
+  background: var(--surface-low);
+  border-radius: var(--r-full);
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 11px;
+  border-radius: var(--r-full);
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--on-surface-var);
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.lang-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  padding: 40px 0;
+  position: relative;
+  overflow: visible;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  width: min(700px, 120vw);
+  height: min(700px, 120vw);
+  background: radial-gradient(circle at center,
+    rgba(107, 56, 212, 0.08) 0%,
+    rgba(164, 48, 115, 0.04) 40%,
+    transparent 70%
+  );
+  top: -150px; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .hero { padding: 64px 0; }
+}
+
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .hero-inner {
+    grid-template-columns: 56fr 44fr;
+    gap: 64px;
+    padding: 0 64px;
+  }
+}
+
+.hero-left { text-align: center; }
+.hero-right { display: flex; flex-direction: column; align-items: center; }
+
+@media (min-width: 768px) {
+  .hero-left { text-align: left; }
+  .hero-right { align-items: flex-start; }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(112, 85, 168, 0.08);
+  border: 1.5px solid rgba(112, 85, 168, 0.22);
+  border-radius: var(--r-full);
+  padding: 6px 18px;
+  margin-bottom: 24px;
+  transform: rotate(-1.2deg);
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-lime);
+  box-shadow: 0 0 6px var(--neon-lime-glow), 0 0 12px var(--neon-lime-glow);
+  flex-shrink: 0;
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.badge-label {
+  font-family: var(--ff-hand);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--primary);
+}
+
+.hero-h1 {
+  font-family: var(--ff-display);
+  font-weight: 800;
+  font-size: clamp(38px, 8vw, 68px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--on-surface);
+  margin-bottom: 20px;
+}
+
+.h1-accent {
+  font-style: italic;
+  background: linear-gradient(125deg, var(--primary) 10%, var(--secondary) 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  position: relative;
+}
+
+.h1-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0; right: 0;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 10'%3E%3Cpath d='M0 5 Q37.5 1 75 5 Q112.5 9 150 5 Q187.5 1 225 5 Q262.5 9 300 5' stroke='%23B5637A' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.6;
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--on-surface-var);
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+
+@media (min-width: 768px) { .hero-sub { font-size: 18px; } }
+
+/* Stats list (pionowa) */
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-bullet {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-lime);
+  box-shadow: 0 0 6px var(--neon-lime-glow);
+  flex-shrink: 0;
+}
+
+.stat-n-inline {
+  font-family: var(--ff-hand);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 50px;
+  line-height: 1;
+  text-shadow: 0 0 14px rgba(112, 85, 168, 0.4);
+}
+
+.stat-l-inline {
+  font-family: var(--ff-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--on-surface-var);
+  line-height: 1.4;
+}
+
+/* Scrapbook cut-out images */
+.scrap-img {
+  position: absolute;
+  pointer-events: none;
+  z-index: 101;
+  filter: drop-shadow(0 8px 22px rgba(30, 24, 18, 0.18));
+  user-select: none;
+  animation: scrapFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes scrapFadeIn {
+  from { opacity: 0; transform: scale(0.88) rotate(var(--sr, 0deg)); }
+  to   { opacity: 1; transform: scale(1)    rotate(var(--sr, 0deg)); }
+}
+
+@media (max-width: 640px) {
+  .scrap-img { width: 110px !important; }
+}
+
+/* Scrapbook doodles */
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.doodle-star {
+  width: 28px; height: 28px;
+  top: -20px; right: 30px;
+  animation: floatDoodle 4s ease-in-out infinite;
+}
+
+.doodle-loop {
+  width: 64px; height: 42px;
+  bottom: 20px; left: -20px;
+  transform: rotate(-15deg);
+  animation: floatDoodle 5s ease-in-out infinite 1s;
+}
+
+@keyframes floatDoodle {
+  0%, 100% { transform: translateY(0) rotate(var(--d-rot, 0deg)); }
+  50%       { transform: translateY(-6px) rotate(var(--d-rot, 0deg)); }
+}
+
+.doodle-loop { --d-rot: -15deg; }
+
+/* Preview card */
+.preview-card-wrap { position: relative; width: 100%; max-width: 380px; }
+
+.preview-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--outline);
+  margin-bottom: 10px;
+}
+
+.preview-card {
+  background: rgba(253, 250, 244, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(112, 85, 168, 0.18);
+  border-radius: var(--r-md);
+  padding: 24px 22px;
+  box-shadow:
+    0 16px 48px rgba(30, 24, 18, 0.1),
+    0 4px 14px rgba(30, 24, 18, 0.06);
+  position: relative;
+  overflow: hidden;
+  transform: rotate(1.5deg);
+  transition: transform 0.3s ease;
+}
+
+.preview-card:hover {
+  transform: rotate(0deg);
+}
+
+.preview-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--preview-accent, var(--primary)), var(--secondary));
+}
+
+.preview-profile {
+  transition: opacity 0.35s ease;
+}
+
+.preview-profile.fade-out { opacity: 0; }
+
+.preview-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ai-indigo);
+  margin-bottom: 8px;
+}
+
+.preview-role-name {
+  font-family: var(--ff-display);
+  font-size: 19px;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  background: linear-gradient(125deg, var(--preview-accent, var(--primary)), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.preview-tagline {
+  font-size: 12px;
+  color: var(--on-surface-var);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.preview-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+
+.preview-dims { display: flex; flex-direction: column; gap: 6px; }
+
+.preview-dim-row { display: flex; align-items: center; gap: 8px; }
+
+.preview-dim-label {
+  font-family: var(--ff-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.preview-dim-track {
+  flex: 1;
+  height: 4px;
+  background: var(--surface-mid);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.preview-dim-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, var(--preview-accent, var(--primary)), var(--secondary));
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* CTA buttons */
+.hero-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+@media (min-width: 400px) {
+  .hero-ctas {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 30px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full);
+  font-family: var(--ff-display);
+  font-size: 15px;
+  font-weight: 700;
+  font-style: italic;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(112, 85, 168, 0.3);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--primary-container);
+  transform: translateY(-2px) rotate(-0.5deg);
+  box-shadow: 0 8px 28px rgba(112, 85, 168, 0.4);
+}
+
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 28px;
+  background: transparent;
+  color: var(--on-surface-var);
+  border: 1px solid var(--outline-var);
+  border-radius: var(--r-full);
+  font-family: var(--ff-display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.btn-ghost:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(107, 56, 212, 0.04);
+}
+
+/* ============================================================
+   ROLE PREVIEW SECTION
+   ============================================================ */
+.roles-section {
+  padding: 8px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-eyebrow {
+  font-family: var(--ff-hand);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+.section-heading {
+  font-family: var(--ff-display);
+  font-size: 26px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--on-surface);
+  text-align: left;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--on-surface-var);
+  text-align: left;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .section-heading { font-size: 26px; }
+}
+
+.roles-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.roles-counter {
+  font-family: var(--ff-display);
+  font-size: clamp(56px, 8vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--outline-var);
+  flex-shrink: 0;
+  letter-spacing: -0.03em;
+  padding-top: 2px;
+  user-select: none;
+  text-shadow: 0 0 30px var(--neon-lime-glow);
+}
+
+@media (max-width: 480px) {
+  .roles-counter { display: none; }
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .roles-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .roles-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
+
+@media (min-width: 1100px) {
+  .roles-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.role-card {
+  background: var(--surface);
+  border: 1px solid var(--outline-var);
+  border-radius: var(--r-md);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  opacity: 0;
+  transform: translateY(16px) rotate(var(--card-tilt, 0deg));
+  box-shadow: 0 2px 10px rgba(30, 24, 18, 0.07), 0 1px 3px rgba(30, 24, 18, 0.04);
+}
+
+.role-card:nth-child(3n+1) { --card-tilt: -0.8deg; }
+.role-card:nth-child(3n+2) { --card-tilt:  0.5deg; }
+.role-card:nth-child(3n)   { --card-tilt: -0.4deg; }
+
+.role-card.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--card-tilt, 0deg));
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.role-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--card-accent, var(--primary)), transparent);
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+
+.role-card:hover {
+  transform: translateY(-5px) rotate(0deg);
+  box-shadow:
+    0 16px 40px rgba(112, 85, 168, 0.14),
+    0 4px 12px rgba(30, 24, 18, 0.06);
+  border-color: rgba(112, 85, 168, 0.28);
+}
+
+.role-card:hover::after { opacity: 1; }
+
+.role-num {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--outline);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.role-name {
+  font-family: var(--ff-display);
+  font-size: 16px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--on-surface);
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.role-desc {
+  font-size: 13px;
+  color: var(--on-surface-var);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: var(--neon-lime);
+  border: 1px solid rgba(100, 180, 0, 0.25);
+  border-radius: var(--r-full);
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--solar-text);
+  white-space: nowrap;
+  box-shadow: 0 0 8px var(--neon-lime-glow), 0 0 2px rgba(194, 255, 0, 0.6);
+}
+
+/* ============================================================
+   DIVIDER + QUIZ CTA BAND
+   ============================================================ */
+.cta-band {
+  background: var(--inverse-surface);
+  border-top: none;
+  border-bottom: none;
+  padding: 56px 0;
+  text-align: center;
+}
+
+.cta-band-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 12px;
+}
+
+.cta-band-title {
+  font-family: var(--ff-display);
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 800;
+  font-style: italic;
+  color: var(--inverse-on-surface);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.cta-band-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--surface-mid);
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    text-align: left;
+  }
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .footer-left { align-items: flex-start; }
+}
+
+.footer-brand {
+  font-family: var(--ff-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.footer-creator {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--on-surface-var);
+  letter-spacing: 0.04em;
+}
+
+.footer-social {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--outline);
+  border-radius: var(--r-full);
+  transition: color 0.18s, background 0.18s;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  color: var(--primary);
+  background: var(--surface-low);
+}
+
+.social-link svg {
+  width: 15px;
+  height: 15px;
+}
+
+.footer-sources {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--outline);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  max-width: 420px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-sources { text-align: right; }
+}
+
+.hero-byline {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--on-surface-var);
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   QUIZ SCREEN — SHARED
+   ============================================================ */
+.screen-quiz,
+.screen-result {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.screen-quiz {
+  background: linear-gradient(180deg, rgba(233, 221, 255, 0.32) 0%, var(--background) 320px);
+}
+
+.quiz-wrap {
+  flex: 1;
+  padding: 32px 0 80px;
+}
+
+@media (min-width: 768px) {
+  .quiz-wrap { padding: 48px 0 100px; }
+}
+
+.quiz-focus {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .quiz-focus { padding: 0 24px; }
+}
+
+.progress-wrap { margin-bottom: 32px; }
+
+.progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.progress-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+}
+
+.progress-pct {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.progress-track {
+  height: 7px;
+  background: var(--surface-mid);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: var(--r-full);
+  transition: width 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.q-category {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--solar-yellow);
+  border: 1px solid rgba(120, 53, 15, 0.12);
+  border-radius: var(--r-full);
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--solar-text);
+  margin-bottom: 18px;
+}
+
+.q-text {
+  font-family: var(--ff-display);
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 700;
+  color: var(--on-surface);
+  line-height: 1.25;
+  margin-bottom: 28px;
+}
+
+/* FORMAT KART — 3 answer cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 580px) {
+  .cards-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+}
+
+.answer-card {
+  background: var(--surface);
+  border: 1.5px solid var(--outline-var);
+  border-radius: var(--r-lg);
+  padding: 22px 18px;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  text-align: left;
+  width: 100%;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.answer-card:hover {
+  border-color: rgba(107, 56, 212, 0.4);
+  box-shadow: 0 0 0 3px rgba(107, 56, 212, 0.08);
+}
+
+.answer-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(107, 56, 212, 0.12);
+  background: rgba(107, 56, 212, 0.03);
+}
+
+.answer-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 20px; height: 20px;
+  background: var(--primary);
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px;
+  animation: dotPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.card-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: block;
+  color: var(--primary);
+}
+
+.card-title {
+  font-family: var(--ff-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--on-surface-var);
+  line-height: 1.55;
+}
+
+/* FORMAT LISTA — radio option list */
+.list-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.list-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1.5px solid var(--outline-var);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  text-align: left;
+  width: 100%;
+  opacity: 0;
+  animation: fadeUp 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.list-option:hover {
+  border-color: rgba(107, 56, 212, 0.35);
+  background: rgba(107, 56, 212, 0.02);
+}
+
+.list-option.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(107, 56, 212, 0.1);
+  background: rgba(107, 56, 212, 0.03);
+}
+
+.radio-dot {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--outline-var);
+  margin-top: 2px;
+  position: relative;
+  transition: border-color 0.18s, background 0.18s;
+  flex-shrink: 0;
+}
+
+.list-option.selected .radio-dot {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.list-option.selected .radio-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.option-text {
+  font-size: 15px;
+  color: var(--on-surface);
+  line-height: 1.5;
+}
+
+/* Quiz navigation */
+.quiz-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 22px;
+  background: transparent;
+  border: 1px solid var(--outline-var);
+  border-radius: var(--r-full);
+  font-family: var(--ff-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-surface-var);
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+.btn-back:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(107, 56, 212, 0.04);
+}
+
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 28px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-full);
+  font-family: var(--ff-display);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(107, 56, 212, 0.25);
+}
+
+.btn-next:not(:disabled):hover {
+  background: var(--primary-container);
+  transform: translateY(-1px);
+}
+
+.btn-next:not(:disabled):active { transform: scale(0.98); }
+
+.btn-next:disabled {
+  background: var(--surface-high);
+  color: var(--outline);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.adaptive-note {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: var(--r-full);
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-style: normal;
+  color: var(--ai-indigo);
+  letter-spacing: 0.05em;
+}
+
+.adaptive-note::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ai-indigo);
+  flex-shrink: 0;
+  animation: blink 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   RESULT SCREEN
+   ============================================================ */
+.result-wrap {
+  flex: 1;
+  padding: 48px 0 80px;
+}
+
+.result-focus {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .result-focus { padding: 0 24px; }
+}
+
+.result-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+  margin-bottom: 10px;
+}
+
+.result-role-name {
+  font-family: var(--ff-display);
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  background: linear-gradient(125deg, var(--primary) 10%, var(--secondary) 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-desc {
+  font-size: 17px;
+  color: var(--on-surface-var);
+  line-height: 1.65;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .result-desc { font-size: 18px; }
+}
+
+.result-section-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+  margin-bottom: 12px;
+}
+
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.roadmap {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 36px;
+}
+
+.roadmap-item {
+  display: flex;
+  gap: 20px;
+}
+
+.roadmap-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.roadmap-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--primary);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.roadmap-line {
+  width: 2px;
+  flex: 1;
+  min-height: 24px;
+  background: linear-gradient(to bottom, var(--primary), rgba(107, 56, 212, 0.15));
+  margin: 6px 0;
+}
+
+.roadmap-content {
+  padding-bottom: 28px;
+  flex: 1;
+}
+
+.roadmap-phase {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.roadmap-title {
+  font-family: var(--ff-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 5px;
+}
+
+.roadmap-detail {
+  font-size: 14px;
+  color: var(--on-surface-var);
+  line-height: 1.6;
+}
+
+.secondary-trait {
+  background: var(--surface-low);
+  border: 1px solid var(--outline-var);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+  margin-bottom: 36px;
+}
+
+.secondary-trait-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+  margin-bottom: 6px;
+}
+
+.secondary-trait-name {
+  font-family: var(--ff-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.secondary-trait-desc {
+  font-size: 14px;
+  color: var(--on-surface-var);
+  line-height: 1.55;
+}
+
+.result-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 400px) {
+  .result-ctas { flex-direction: row; }
+}
+
+/* ============================================================
+   DIM BARS (result screen — score visualization)
+   ============================================================ */
+.dim-bars-section { margin-bottom: 36px; }
+
+.dim-bars { display: flex; flex-direction: column; gap: 10px; }
+
+.dim-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dim-label {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--on-surface-var);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 400px) {
+  .dim-label { width: 110px; font-size: 10px; }
+}
+
+.dim-track {
+  flex: 1;
+  height: 6px;
+  background: var(--surface-mid);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.dim-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: var(--r-full);
+  width: 0;
+  transition: width 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dim-pct {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--primary);
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes questionEnter {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.question-enter { animation: questionEnter 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes resultReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.result-focus > * {
+  animation: resultReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.result-focus > *:nth-child(1) { animation-delay: 0.05s; }
+.result-focus > *:nth-child(2) { animation-delay: 0.15s; }
+.result-focus > *:nth-child(3) { animation-delay: 0.25s; }
+.result-focus > *:nth-child(4) { animation-delay: 0.35s; }
+.result-focus > *:nth-child(5) { animation-delay: 0.45s; }
+.result-focus > *:nth-child(6) { animation-delay: 0.55s; }
+.result-focus > *:nth-child(7) { animation-delay: 0.65s; }
+.result-focus > *:nth-child(8) { animation-delay: 0.72s; }
+
+@keyframes dotPop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.roadmap-dot { animation: dotPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.roadmap-item:nth-child(1) .roadmap-dot { animation-delay: 0.4s; }
+.roadmap-item:nth-child(2) .roadmap-dot { animation-delay: 0.7s; }
+.roadmap-item:nth-child(3) .roadmap-dot { animation-delay: 1.0s; }
+
+/* Stagger for answer options */
+.answer-card:nth-child(1), .list-option:nth-child(1) { animation-delay: 0.06s; }
+.answer-card:nth-child(2), .list-option:nth-child(2) { animation-delay: 0.13s; }
+.answer-card:nth-child(3), .list-option:nth-child(3) { animation-delay: 0.20s; }
+.list-option:nth-child(4) { animation-delay: 0.27s; }
+.list-option:nth-child(5) { animation-delay: 0.34s; }
+.list-option:nth-child(6) { animation-delay: 0.41s; }
+
+.hero-badge  { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; }
+.hero-h1     { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+.hero-sub    { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+.stats-bar   { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both; }
+.hero-ctas   { animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NEWSLETTER MODAL
+     ============================================================ -->
+<div id="modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-eyebrow">
+      <span data-i18n="modal.eyebrow">WYNIK NA EMAIL</span>
+    </div>
+    <h2 class="modal-title" id="modal-title">
+      <span data-i18n="modal.title">Zanim zaczniesz</span>
+    </h2>
+    <p class="modal-sub">
+      <span data-i18n="modal.sub">Podaj adres e-mail - wynik quizu trafi prosto do skrzynki. Możesz też zapisać się do newslettera o przyszłości designu.</span>
+    </p>
+
+    <div class="form-group">
+      <label class="form-label" for="email-input">
+        <span data-i18n="modal.label">Adres e-mail</span>
+      </label>
+      <input
+        type="email"
+        id="email-input"
+        class="input-email"
+        autocomplete="email"
+        required
+      >
+    </div>
+
+    <label class="checkbox-row">
+      <input type="checkbox" id="nl-check" class="checkbox-input">
+      <span class="checkbox-text" data-i18n="modal.checkbox">Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI</span>
+    </label>
+
+    <button id="btn-go" class="btn-modal-go" disabled>
+      <span data-i18n="modal.cta">Przejdź do quizu</span>
+    </button>
+
+    <div class="modal-skip-row">
+      <button id="btn-skip" class="btn-skip">
+        <span data-i18n="modal.skip">Pomiń, zacznij bez maila</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     LANDING SCREEN
+     ============================================================ -->
+<div id="screen-landing">
+
+  <!-- NAV -->
+  <nav class="nav" id="main-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <span class="nav-logo-main" data-i18n="nav.title">Jakim AI Designerem będziesz?</span>
+        </a>
+        <div class="lang-toggle" role="group" aria-label="Wybor jezyka">
+          <button class="lang-btn active" id="btn-pl" onclick="setLang('pl')">PL</button>
+          <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+
+          <!-- LEFT COLUMN -->
+          <div class="hero-left">
+
+            <div class="hero-badge">
+              <span class="badge-dot"></span>
+              <span class="badge-label" data-i18n="hero.badge">HORYZONT 2030</span>
+            </div>
+
+            <h1 class="hero-h1">
+              <span data-i18n="hero.h1.line1">Jakim AI</span><br>
+              <span class="h1-accent" data-i18n="hero.h1.line2">Designerem</span><br>
+              <span data-i18n="hero.h1.line3">będziesz?</span>
+            </h1>
+
+            <p class="hero-sub" data-i18n="hero.sub">
+              Jedyne narzędzie diagnostyczne dla designerów oparte na danych WEF, Autodesk i Figma. 10 pytań - konkretny profil roli i plan kompetencyjny na 3 lata.
+            </p>
+            <p class="hero-byline" data-i18n="hero.author">autorka: Magdalena Stasiak · AI UX consultant</p>
+
+            <div class="stats-list">
+              <div class="stat-item">
+                <span class="stat-bullet"></span>
+                <span class="stat-n-inline">45%</span>
+                <span class="stat-l-inline" data-i18n="stat1">więcej ról UX do 2030</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-bullet"></span>
+                <span class="stat-n-inline">#8</span>
+                <span class="stat-l-inline" data-i18n="stat2">lista WEF - rosnące zawody</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-bullet"></span>
+                <span class="stat-n-inline">91%</span>
+                <span class="stat-l-inline" data-i18n="stat3">designerów: AI przyspiesza</span>
+              </div>
+            </div>
+
+            <div class="hero-ctas">
+              <button class="btn-primary" id="btn-open-modal" data-i18n="hero.cta.primary">
+                Rozpocznij quiz
+              </button>
+              <a href="#roles" class="btn-ghost" data-i18n="hero.cta.ghost">
+                Zobacz zawody przyszłości
+              </a>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN — animated preview card -->
+          <div class="hero-right">
+            <!-- scrapbook doodles -->
+            <svg class="doodle doodle-star" aria-hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 16.7l-6.2 4.3 2.4-7.3L2 9.2h7.6z" stroke="var(--secondary)" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            <svg class="doodle doodle-loop" aria-hidden="true" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20 Q15 5 30 20 Q45 35 55 20" stroke="var(--tertiary)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="preview-card-wrap">
+              <div class="preview-label" data-i18n="preview.label">PRZYKŁADOWY WYNIK</div>
+              <div class="preview-card" id="preview-card">
+                <div class="preview-profile" id="preview-profile"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLE PREVIEW -->
+    <section class="roles-section" id="roles">
+      <div class="container">
+        <div class="roles-header">
+          <div class="roles-counter" aria-hidden="true">07</div>
+          <div>
+            <div class="section-eyebrow" data-i18n="roles.eyebrow">7 ZAWODÓW PRZYSZŁOŚCI</div>
+            <h2 class="section-heading" data-i18n="roles.heading">Która ścieżka jest Twoja?</h2>
+            <p class="section-sub" data-i18n="roles.sub">Przejrzyj role, które według badań WEF, Autodesk i Figma będą rosły najszybciej do 2030 roku.</p>
+          </div>
+        </div>
+        <div class="roles-grid" id="roles-grid"></div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <section class="cta-band">
+      <div class="container">
+        <div class="cta-band-label" data-i18n="band.label">QUIZ DIAGNOSTYCZNY</div>
+        <h2 class="cta-band-title" data-i18n="band.title">Gotowa sprawdzić, gdzie pasujesz?</h2>
+        <p class="cta-band-sub" data-i18n="band.sub">10 pytań, 5 minut, konkretna odpowiedź - i plan kompetencyjny na 3 lata.</p>
+        <button class="btn-primary" onclick="openModal()" data-i18n="band.cta">Rozpocznij quiz</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <div class="footer-brand" data-i18n="footer.brand">AI Design Lab</div>
+          <p class="footer-creator" data-i18n="footer.creator">Stworzone przez Magdalena Stasiak</p>
+          <nav class="footer-social" aria-label="Social media">
+            <a href="https://linkedin.com/in/stasiakmagdalena" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://tiktok.com/@iamstasiak" class="social-link" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.93a8.16 8.16 0 004.77 1.52V7a4.85 4.85 0 01-1-.31z"/></svg>
+            </a>
+            <a href="https://instagram.com/iamstasiak" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com/@stasiakai" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.47a2.78 2.78 0 00-1.95 1.95A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
+            </a>
+          </nav>
+        </div>
+        <div class="footer-sources" data-i18n="footer.sources">
+          Źródła: WEF Future of Jobs 2025 · Autodesk AI Jobs Report 2025 · Figma State of the Designer 2025
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /screen-landing -->
+
+<!-- ============================================================
+     QUIZ SCREEN
+     ============================================================ -->
+<div id="screen-quiz" class="screen-quiz" style="display:none">
+  <nav class="nav" id="quiz-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo" onclick="return false;">
+          <span class="nav-logo-main" data-i18n="nav.title">Jakim AI Designerem będziesz?</span>
+        </a>
+        <div class="lang-toggle" role="group" aria-label="Wybor jezyka">
+          <button class="lang-btn active" id="btn-pl-q" onclick="setLang('pl')">PL</button>
+          <button class="lang-btn"        id="btn-en-q" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="quiz-wrap">
+    <div class="quiz-focus" id="quiz-content"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     RESULT SCREEN
+     ============================================================ -->
+<div id="screen-result" class="screen-result" style="display:none">
+  <nav class="nav" id="result-nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo" onclick="return false;">
+          <span class="nav-logo-main" data-i18n="nav.title">Jakim AI Designerem będziesz?</span>
+        </a>
+        <div class="lang-toggle" role="group" aria-label="Wybor jezyka">
+          <button class="lang-btn active" id="btn-pl-r" onclick="setLang('pl')">PL</button>
+          <button class="lang-btn"        id="btn-en-r" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="result-wrap">
+    <div class="result-focus" id="result-content"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURATION
+   ============================================================ */
+const MAILERLITE_API_KEY = 'YOUR_MAILERLITE_API_KEY';
+const MAILERLITE_GROUP_ID = 'YOUR_GROUP_ID';
+
+/* ============================================================
+   APP STATE
+   ============================================================ */
+const state = {
+  lang: 'pl',
+  email: null,
+  newsletter: false,
+};
+
+/* ============================================================
+   I18N STRINGS
+   ============================================================ */
+const i18n = {
+  pl: {
+    'nav.title':           'AI Design Lab',
+    'nav.sub':             'Quiz diagnostyczny - horyzont 2030',
+    'hero.badge':          'HORYZONT 2030',
+    'hero.h1.line1':       'Jakim AI',
+    'hero.h1.line2':       'Designerem',
+    'hero.h1.line3':       'będziesz?',
+    'hero.sub':            'Jedyne narzędzie diagnostyczne dla designerów oparte na danych WEF, Autodesk i Figma. 10 pytań - konkretny profil roli i plan kompetencyjny na 3 lata.',
+    'hero.author':         'autorka: Magdalena Stasiak · AI UX consultant',
+    'stat1':               'więcej ról UX do 2030',
+    'stat2':               'lista WEF - rosnące zawody',
+    'stat3':               'designerów: AI przyspiesza',
+    'preview.label':       'PRZYKŁADOWY WYNIK',
+    'result.eyebrow':      'Twoja przyszłość to:',
+    'hero.cta.primary':    'Rozpocznij quiz',
+    'hero.cta.ghost':      'Zobacz zawody przyszłości',
+    'roles.eyebrow':       '7 ZAWODÓW PRZYSZŁOŚCI',
+    'roles.heading':       'Która ścieżka jest Twoja?',
+    'roles.sub':           'Przejrzyj role, które według badań WEF, Autodesk i Figma będą rosły najszybciej do 2030 roku.',
+    'band.label':          'QUIZ DIAGNOSTYCZNY',
+    'band.title':          'Gotowa na konkretny plan - nie kolejny artykuł o AI?',
+    'band.sub':            'Jedyne narzędzie łączące quiz diagnostyczny z trzyletnim planem kompetencyjnym. 10 pytań, 5 minut.',
+    'band.cta':            'Rozpocznij quiz',
+    'footer.brand':        'AI Design Lab',
+    'footer.creator':      'Stworzone przez Magdalena Stasiak',
+    'footer.sources':      'Źródła: WEF Future of Jobs 2025 · Autodesk AI Jobs Report 2025 · Figma State of the Designer 2025',
+    'modal.eyebrow':       'WYNIK NA EMAIL',
+    'modal.title':         'Zanim zaczniesz',
+    'modal.sub':           'Podaj adres e-mail - wynik quizu i plan kompetencyjny trafią prosto do skrzynki.',
+    'modal.label':         'Adres e-mail',
+    'modal.checkbox':      'Chcę miesięczny newsletter - trendy AI-UX, narzędzia i analizy od Magdaleny Stasiak',
+    'modal.cta':           'Przejdź do quizu',
+    'modal.skip':          'Pomiń, zacznij bez maila',
+  },
+  en: {
+    'nav.title':           'AI Design Lab',
+    'nav.sub':             'Diagnostic quiz - horizon 2030',
+    'hero.badge':          'HORIZON 2030',
+    'hero.h1.line1':       'What AI',
+    'hero.h1.line2':       'Designer',
+    'hero.h1.line3':       'will you become?',
+    'hero.sub':            'The only diagnostic tool for designers built on WEF, Autodesk and Figma data. 10 questions - a concrete role profile and a 3-year competency plan.',
+    'hero.author':         'by Magdalena Stasiak · AI UX consultant',
+    'stat1':               'more UX roles by 2030',
+    'stat2':               'WEF list - fastest growing',
+    'stat3':               'designers: AI accelerates',
+    'preview.label':       'SAMPLE RESULT',
+    'result.eyebrow':      'Your future is:',
+    'hero.cta.primary':    'Start quiz',
+    'hero.cta.ghost':      'See future professions',
+    'roles.eyebrow':       '7 FUTURE PROFESSIONS',
+    'roles.heading':       'Which path is yours?',
+    'roles.sub':           'Explore roles that WEF, Autodesk and Figma research identifies as fastest growing through 2030.',
+    'band.label':          'DIAGNOSTIC QUIZ',
+    'band.title':          'Ready for a real plan - not another AI article?',
+    'band.sub':            'The only tool combining a diagnostic quiz with a 3-year competency plan. 10 questions, 5 minutes.',
+    'band.cta':            'Start quiz',
+    'footer.brand':        'AI Design Lab',
+    'footer.creator':      'Created by Magdalena Stasiak',
+    'footer.sources':      'Sources: WEF Future of Jobs 2025 · Autodesk AI Jobs Report 2025 · Figma State of the Designer 2025',
+    'modal.eyebrow':       'RESULT BY EMAIL',
+    'modal.title':         'Before you start',
+    'modal.sub':           'Enter your email - your quiz result and competency plan will go straight to your inbox.',
+    'modal.label':         'Email address',
+    'modal.checkbox':      'I want the monthly newsletter - AI-UX trends, tools and analysis by Magdalena Stasiak',
+    'modal.cta':           'Go to quiz',
+    'modal.skip':          'Skip, start without email',
+  },
+};
+
+/* ============================================================
+   ROLE PREVIEW DATA
+   ============================================================ */
+const roles = [
+  {
+    num: '01',
+    name: { pl: 'AI Interaction Designer', en: 'AI Interaction Designer' },
+    desc: {
+      pl: 'Projektuje dialogi, agenty i systemy konwersacyjne. Definiuje ton, charakter i logikę interakcji człowieka z AI.',
+      en: 'Designs dialogues, agents and conversational systems. Defines tone, character and logic of human-AI interaction.',
+    },
+    chips: ['CONVERSATIONAL AI', 'DIALOG DESIGN', 'LLM PATTERNS'],
+  },
+  {
+    num: '02',
+    name: { pl: 'AI Product Designer', en: 'AI Product Designer' },
+    desc: {
+      pl: 'Odpowiada za funkcje AI w produkcie - od discovery po iteracje po wdrożeniu. Definiuje gdzie AI realnie daje wartość.',
+      en: 'Owns AI features in the product - from discovery to post-launch iteration. Defines where AI genuinely adds value.',
+    },
+    chips: ['AI FEATURE DESIGN', 'DISCOVERY', 'PRODUCT METRICS'],
+  },
+  {
+    num: '03',
+    name: { pl: 'Design Technologist', en: 'Design Technologist' },
+    desc: {
+      pl: 'Łączy design z implementacją. Buduje działające prototypy i systemy komponentów, korzystając z AI jako narzędzia.',
+      en: 'Bridges design and implementation. Builds working prototypes and component systems, using AI as a tool.',
+    },
+    chips: ['AI PROTOTYPING', 'NO-CODE BUILD', 'FRONT-END'],
+  },
+  {
+    num: '04',
+    name: { pl: 'AI UX Strategist', en: 'AI UX Strategist' },
+    desc: {
+      pl: 'Kształtuje AI roadmapy i strategie produktowe na poziomie organizacji. Łączy perspektywę biznesu, designu i technologii.',
+      en: 'Shapes AI roadmaps and product strategies at the organizational level. Connects business, design and technology perspectives.',
+    },
+    chips: ['AI STRATEGY', 'GOVERNANCE', 'STAKEHOLDER MGT'],
+  },
+  {
+    num: '05',
+    name: { pl: 'AI Ethics UX Consultant', en: 'AI Ethics UX Consultant' },
+    desc: {
+      pl: 'Audytuje systemy AI pod kątem fairness i zgodności z EU AI Act. Tworzy wytyczne etyczne dla zespołów produktowych.',
+      en: 'Audits AI systems for fairness and EU AI Act compliance. Creates ethical guidelines for product teams.',
+    },
+    chips: ['BIAS TESTING', 'EU AI ACT', 'TRANSPARENCY UX'],
+  },
+  {
+    num: '06',
+    name: { pl: 'Immersive Experience Architect', en: 'Immersive Experience Architect' },
+    desc: {
+      pl: 'Tworzy środowiska AR i VR zasilane generatywną AI. Projektuje przestrzenne narracje i interakcje bez tradycyjnych ekranów.',
+      en: 'Creates AR and VR environments powered by generative AI. Designs spatial narratives and interactions beyond traditional screens.',
+    },
+    chips: ['AR/VR DESIGN', 'SPATIAL UX', 'GENERATIVE 3D'],
+  },
+  {
+    num: '07',
+    name: { pl: 'AI-Augmented Design Leader', en: 'AI-Augmented Design Leader' },
+    desc: {
+      pl: 'Zarządza transformacją organizacji przez AI. Buduje interdyscyplinarne zespoły i kształtuje kulturę projektowania z AI.',
+      en: 'Leads organizational AI transformation. Builds cross-disciplinary teams and shapes a culture of designing with AI.',
+    },
+    chips: ['AI LEADERSHIP', 'TEAM BUILDING', 'ORG TRANSFORMATION'],
+  },
+];
+
+/* ============================================================
+   QUIZ QUESTIONS
+   ============================================================ */
+const questions = {
+  Q1: {
+    phase: 'universal', format: 'lista',
+    cat: { pl: 'PREFERENCJE PRACY', en: 'WORK PREFERENCES' },
+    text: { pl: 'Co sprawia, że tracisz poczucie czasu przy pracy?', en: 'What makes you lose track of time at work?' },
+    options: [
+      { pl: 'Rozmawiam z użytkownikami i analizuję dialogi z AI', en: 'Talking to users and analyzing AI dialogues', scores: { CONV: 3, SYS: 1 } },
+      { pl: 'Buduję działające prototypy i łączę design z kodem', en: 'Building working prototypes and bridging design with code', scores: { BUILD: 3 } },
+      { pl: 'Maluję szeroki obraz - strategie, ekosystemy, governance', en: 'Painting the big picture - strategies, ecosystems, governance', scores: { SYS: 3 } },
+      { pl: 'Projektuję, jak AI realnie zmienia metryki produktu', en: 'Designing how AI genuinely changes product metrics', scores: { BUILD: 2, SYS: 2 } },
+      { pl: 'Analizuję etykę, bias i regulacje - tworzę wytyczne', en: 'Analyzing ethics, bias and regulations - creating guidelines', scores: { ETHIC: 3, SYS: 1 } },
+      { pl: 'Tworzę przestrzenne doświadczenia w AR i VR', en: 'Creating spatial experiences in AR and VR', scores: { IMMERSE: 3 } },
+    ]
+  },
+  Q2: {
+    phase: 'universal', format: 'lista',
+    cat: { pl: 'TOŻSAMOŚĆ ZAWODOWA', en: 'PROFESSIONAL IDENTITY' },
+    text: { pl: 'Które zdanie rezonuje z Tobą najsilniej?', en: 'Which statement resonates with you most?' },
+    options: [
+      { pl: 'AI musi brzmieć jak człowiek i rozumieć kontekst rozmowy', en: 'AI must sound human and understand conversational context', scores: { CONV: 3 } },
+      { pl: 'Klikam Deploy i widzę, jak mój prototyp żyje na produkcji', en: 'I click Deploy and watch my prototype go live in production', scores: { BUILD: 3 } },
+      { pl: 'Mój projekt zmienił retencję i NPS o 20%', en: 'My design changed retention and NPS by 20%', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'System działa dla 50 różnych typów użytkowników naraz', en: 'The system works for 50 different user types at once', scores: { SYS: 3 } },
+      { pl: 'Użytkownik ma pełną kontrolę i rozumie, co robi AI', en: 'The user has full control and understands what AI is doing', scores: { ETHIC: 3 } },
+      { pl: 'Świat fizyczny i cyfrowy przenikają się w moim projekcie', en: 'The physical and digital worlds merge in my design', scores: { IMMERSE: 3 } },
+    ]
+  },
+  Q3: {
+    phase: 'universal', format: 'kart',
+    cat: { pl: 'SATYSFAKCJA Z PRACY', en: 'WORK SATISFACTION' },
+    text: { pl: 'Jakie zadania w procesie projektowym sprawiają Ci największą satysfakcję?', en: 'Which tasks in the design process give you the most satisfaction?' },
+    options: [
+      { icon: '◇', title: { pl: 'Interakcje i rozmowy', en: 'Interactions and conversations' }, pl: 'Projektowanie dialogów, obsługi błędów i tonu komunikacji z użytkownikiem', en: 'Designing dialogues, error handling and communication tone', scores: { CONV: 3 } },
+      { icon: '◈', title: { pl: 'Systemy i prototypy', en: 'Systems and prototypes' }, pl: 'Budowanie działających prototypów i systemów komponentów', en: 'Building working prototypes and component systems', scores: { BUILD: 3 } },
+      { icon: '◉', title: { pl: 'Strategia i etyka', en: 'Strategy and ethics' }, pl: 'Kształtowanie kierunku produktu, governance i zasad odpowiedzialnej AI', en: 'Shaping product direction, governance and responsible AI principles', scores: { SYS: 2, ETHIC: 1 } },
+    ]
+  },
+  Q4A: {
+    phase: 'adaptive', path: 'A', format: 'lista',
+    cat: { pl: 'CONVERSATIONAL DESIGN', en: 'CONVERSATIONAL DESIGN' },
+    text: { pl: 'Jak projektujesz obsługę błędów w rozmowie z AI?', en: 'How do you approach error handling in AI conversations?' },
+    options: [
+      { pl: 'Piszę alternatywne ścieżki dialogowe - AI wyjaśnia, co się stało', en: 'I write alternative dialogue paths - AI explains what happened', scores: { CONV: 3 } },
+      { pl: 'Badam, jak użytkownicy reagują na błędy i uczę się z tego', en: 'I research how users react to errors and learn from it', scores: { CONV: 2, ETHIC: 1 } },
+      { pl: 'Tworzę system fallback z eskalacją do ludzkiego agenta', en: 'I create a fallback system with escalation to a human agent', scores: { CONV: 2, SYS: 1 } },
+      { pl: 'Definiuję metryki sukcesu i mierzę wskaźnik rozwiązania problemu', en: 'I define success metrics and measure problem resolution rate', scores: { SYS: 2, BUILD: 1 } },
+    ]
+  },
+  Q5A: {
+    phase: 'adaptive', path: 'A', format: 'lista',
+    cat: { pl: 'PRIORYTETY DESIGNU', en: 'DESIGN PRIORITIES' },
+    text: { pl: 'Co jest dla Ciebie ważniejsze w projekcie konwersacyjnym?', en: 'What matters more to you in conversational design?' },
+    options: [
+      { pl: 'Naturalne brzmienie i empatyczne odpowiedzi AI', en: 'Natural tone and empathetic AI responses', scores: { CONV: 3 } },
+      { pl: 'Precyzja informacji i brak halucynacji', en: 'Information accuracy and absence of hallucinations', scores: { ETHIC: 2, BUILD: 1 } },
+      { pl: 'Szybkość odpowiedzi i płynność doświadczenia', en: 'Response speed and smoothness of the experience', scores: { BUILD: 2, CONV: 1 } },
+      { pl: 'Możliwość personalizacji dla różnych kontekstów', en: 'Ability to personalize for different contexts', scores: { SYS: 2, CONV: 1 } },
+    ]
+  },
+  Q6A: {
+    phase: 'adaptive', path: 'A', format: 'lista',
+    cat: { pl: 'SKALA DZIAŁANIA', en: 'SCOPE OF IMPACT' },
+    text: { pl: 'Wolisz projektować dla jednego użytkownika czy systemu dla mas?', en: 'Do you prefer designing for one user or a system for the masses?' },
+    options: [
+      { pl: 'Dla konkretnego użytkownika - głęboka personalizacja', en: 'For a specific user - deep personalization', scores: { CONV: 3 } },
+      { pl: 'Dla systemu, który skaluje się na miliony', en: 'For a system that scales to millions', scores: { SYS: 3 } },
+      { pl: 'Dla zespołów i organizacji - zmiana wewnętrzna', en: 'For teams and organizations - internal transformation', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'Balansuję między personalizacją a skalą', en: 'I balance between personalization and scale', scores: { CONV: 1, SYS: 2 } },
+    ]
+  },
+  Q7A: {
+    phase: 'adaptive', path: 'A', format: 'lista',
+    cat: { pl: 'METRYKI SUKCESU', en: 'SUCCESS METRICS' },
+    text: { pl: 'Jak mierzysz sukces w conversational design?', en: 'How do you measure success in conversational design?' },
+    options: [
+      { pl: 'Wskaźnik task completion i satysfakcja użytkownika (CSAT)', en: 'Task completion rate and user satisfaction (CSAT)', scores: { CONV: 3 } },
+      { pl: 'Liczba interakcji bez eskalacji do agenta', en: 'Number of interactions without escalation to an agent', scores: { CONV: 2, SYS: 1 } },
+      { pl: 'Retencja i powracający użytkownicy', en: 'Retention and returning users', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'Brak skarg na bias lub nieetyczne odpowiedzi', en: 'Absence of bias or unethical response complaints', scores: { ETHIC: 3 } },
+    ]
+  },
+  Q4B: {
+    phase: 'adaptive', path: 'B', format: 'lista',
+    cat: { pl: 'NARZĘDZIA I STACK', en: 'TOOLS AND STACK' },
+    text: { pl: 'Co jest Twoim pierwszym wyborem do prototypowania z AI?', en: 'What is your first choice for prototyping with AI?' },
+    options: [
+      { pl: 'Cursor lub GitHub Copilot - buduję w prawdziwym kodzie', en: 'Cursor or GitHub Copilot - I build in real code', scores: { BUILD: 3 } },
+      { pl: 'Framer lub Webflow - no-code z integracjami AI', en: 'Framer or Webflow - no-code with AI integrations', scores: { BUILD: 2, CONV: 1 } },
+      { pl: 'Figma z pluginami AI - szybki prototyp do testów', en: 'Figma with AI plugins - quick prototype for testing', scores: { BUILD: 1, CONV: 2 } },
+      { pl: 'Python notebooks - eksperymentuję z modelami', en: 'Python notebooks - I experiment with models', scores: { BUILD: 3, ETHIC: 1 } },
+    ]
+  },
+  Q5B: {
+    phase: 'adaptive', path: 'B', format: 'lista',
+    cat: { pl: 'STYL PRACY', en: 'WORK STYLE' },
+    text: { pl: 'Co robisz, kiedy design wymaga technicznego rozwiązania?', en: 'What do you do when design requires a technical solution?' },
+    options: [
+      { pl: 'Buduję to sam - lubię wiedzieć, jak to działa pod maską', en: 'I build it myself - I like knowing how it works under the hood', scores: { BUILD: 3 } },
+      { pl: 'Tworzę dokładną specyfikację i ściśle współpracuję z developerem', en: 'I create a detailed spec and closely collaborate with the developer', scores: { BUILD: 2, SYS: 1 } },
+      { pl: 'Szukam no-code rozwiązania, które sam zaimplementuję', en: 'I look for a no-code solution I can implement myself', scores: { BUILD: 2, CONV: 1 } },
+      { pl: 'Sprawdzam API - jeśli istnieje integracja, sam ją podłączam', en: 'I check the API - if an integration exists, I connect it myself', scores: { BUILD: 3 } },
+    ]
+  },
+  Q6B: {
+    phase: 'adaptive', path: 'B', format: 'lista',
+    cat: { pl: 'TEMPO DOSTARCZANIA', en: 'DELIVERY PACE' },
+    text: { pl: 'Co preferujesz w podejściu do dostarczania produktu?', en: 'What do you prefer in your product delivery approach?' },
+    options: [
+      { pl: 'MVP w tydzień - iteruję szybko i uczę się z działania', en: 'MVP in a week - I iterate fast and learn by doing', scores: { BUILD: 3 } },
+      { pl: 'Solidny produkt w 3 miesiące - zrobiony dobrze od razu', en: 'Solid product in 3 months - done right from the start', scores: { BUILD: 1, SYS: 2 } },
+      { pl: 'Ciągłe dostarczanie - małe kawałki, duże tempo', en: 'Continuous delivery - small pieces, high pace', scores: { BUILD: 2, SYS: 1 } },
+      { pl: 'Zależy od projektu i kontekstu biznesowego', en: 'Depends on the project and business context', scores: { BUILD: 1, SYS: 1 } },
+    ]
+  },
+  Q7B: {
+    phase: 'adaptive', path: 'B', format: 'lista',
+    cat: { pl: 'INTEGRACJE AI', en: 'AI INTEGRATIONS' },
+    text: { pl: 'Jak ważna jest znajomość API i integracji AI dla Twojej pracy?', en: 'How important is API and AI integration knowledge for your work?' },
+    options: [
+      { pl: 'Kluczowa - bez tego jestem ograniczony w tym, co mogę zbudować', en: 'Critical - without it I am limited in what I can build', scores: { BUILD: 3 } },
+      { pl: 'Ważna, ale nie muszę znać każdego detalu implementacji', en: 'Important, but I do not need to know every implementation detail', scores: { BUILD: 2, SYS: 1 } },
+      { pl: 'Przydatna do rozmów z developerami, niekoniecznie do samodzielnej pracy', en: 'Useful for developer conversations, not necessarily for solo work', scores: { CONV: 1, SYS: 2 } },
+      { pl: 'Mało istotna - skupiam się na warstwie doświadczenia', en: 'Not very relevant - I focus on the experience layer', scores: { CONV: 2, ETHIC: 1 } },
+    ]
+  },
+  Q4C: {
+    phase: 'adaptive', path: 'C', format: 'lista',
+    cat: { pl: 'ROLA STRATEGICZNA', en: 'STRATEGIC ROLE' },
+    text: { pl: 'Jak wygląda Twoja rola na spotkaniu z zarządem?', en: 'What is your role in a meeting with executive leadership?' },
+    options: [
+      { pl: 'Prezentuję dane i rekomendacje - jestem głosem użytkownika', en: 'I present data and recommendations - I am the voice of the user', scores: { SYS: 3 } },
+      { pl: 'Facilitatoruję decyzje - zamiast mówić, zadaję właściwe pytania', en: 'I facilitate decisions - instead of telling, I ask the right questions', scores: { SYS: 2, CONV: 1 } },
+      { pl: 'Bronię perspektywy designu w dyskusji o priorytetach', en: 'I defend the design perspective in priority discussions', scores: { SYS: 2, ETHIC: 1 } },
+      { pl: 'Dostarczam insighty, które kształtują strategię produktu', en: 'I deliver insights that shape product strategy', scores: { SYS: 3, BUILD: 1 } },
+    ]
+  },
+  Q5C: {
+    phase: 'adaptive', path: 'C', format: 'lista',
+    cat: { pl: 'DEFINICJA SUKCESU', en: 'DEFINITION OF SUCCESS' },
+    text: { pl: 'Co definiuje sukces całego ekosystemu usługi?', en: 'What defines the success of an entire service ecosystem?' },
+    options: [
+      { pl: 'Metryki retencji i wartość życiowa klienta (LTV)', en: 'Retention metrics and customer lifetime value (LTV)', scores: { SYS: 3 } },
+      { pl: 'NPS powyżej 50 i organiczny word-of-mouth', en: 'NPS above 50 and organic word-of-mouth', scores: { SYS: 2, CONV: 1 } },
+      { pl: 'Skalowalność - system, który rośnie bez proporcjonalnych kosztów', en: 'Scalability - a system that grows without proportional costs', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'Zaufanie użytkowników i niski wskaźnik reklamacji', en: 'User trust and low complaint rate', scores: { ETHIC: 2, SYS: 1 } },
+    ]
+  },
+  Q6C: {
+    phase: 'adaptive', path: 'C', format: 'lista',
+    cat: { pl: 'ZARZĄDZANIE KONFLIKTEM', en: 'CONFLICT MANAGEMENT' },
+    text: { pl: 'Jak zarządzasz konfliktami między interesariuszami?', en: 'How do you manage conflicts between stakeholders?' },
+    options: [
+      { pl: 'Mapuję interesy każdej strony i szukam wspólnego celu', en: 'I map each party\'s interests and find a common goal', scores: { SYS: 3 } },
+      { pl: 'Sprowadzam dyskusję do danych - pozwalam faktom decydować', en: 'I bring the discussion to data - I let facts decide', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'Buduję koalicje z kluczowymi osobami zanim dojdzie do konfliktu', en: 'I build coalitions with key people before conflict arises', scores: { SYS: 2, CONV: 1 } },
+      { pl: 'Skaluję decyzję wyżej, jeśli konsensus jest niemożliwy', en: 'I escalate the decision if consensus is impossible', scores: { SYS: 1, ETHIC: 1 } },
+    ]
+  },
+  Q7C: {
+    phase: 'adaptive', path: 'C', format: 'lista',
+    cat: { pl: 'BUDOWANIE ZESPOŁU', en: 'TEAM BUILDING' },
+    text: { pl: 'Czy zależy Ci na budowaniu zespołów i mentoringu?', en: 'Do you care about building teams and mentoring?' },
+    options: [
+      { pl: 'Tak - rozwijanie ludzi to jedno z moich największych źródeł satysfakcji', en: 'Yes - developing people is one of my greatest sources of satisfaction', scores: { SYS: 2, CONV: 1 } },
+      { pl: 'Chętnie, ale wolę skupiać się na produktach i strategii', en: 'Happily, but I prefer focusing on products and strategy', scores: { SYS: 3 } },
+      { pl: 'Mentoring tak, ale zarządzanie zespołem nie jest moim celem', en: 'Mentoring yes, but team management is not my goal', scores: { SYS: 1, BUILD: 2 } },
+      { pl: 'Wolę pracować w małym, autonomicznym zespole niż nim zarządzać', en: 'I prefer working in a small, autonomous team over managing one', scores: { BUILD: 2, CONV: 1 } },
+    ]
+  },
+  Q4D: {
+    phase: 'adaptive', path: 'D', format: 'lista',
+    cat: { pl: 'TRANSPARENTNOŚĆ AI', en: 'AI TRANSPARENCY' },
+    text: { pl: 'Jak projektujesz disclosure dla funkcji AI w produkcie?', en: 'How do you design AI disclosure for product features?' },
+    options: [
+      { pl: 'Zawsze wyraźna etykieta i możliwość wyłączenia', en: 'Always a clear label and the ability to turn it off', scores: { ETHIC: 3 } },
+      { pl: 'Kontekstowe informacje - tyle ile potrzeba, kiedy potrzeba', en: 'Contextual information - as much as needed, when needed', scores: { ETHIC: 2, CONV: 1 } },
+      { pl: 'Onboarding z pełnym wyjaśnieniem działania AI', en: 'Onboarding with a full explanation of how AI works', scores: { ETHIC: 2, SYS: 1 } },
+      { pl: 'Regularne raporty dla użytkownika o tym, czego AI się nauczyło', en: 'Regular reports for the user on what AI has learned', scores: { ETHIC: 2, BUILD: 1 } },
+    ]
+  },
+  Q5D: {
+    phase: 'adaptive', path: 'D', format: 'lista',
+    cat: { pl: 'SEKTORY REGULOWANE', en: 'REGULATED SECTORS' },
+    text: { pl: 'Co najważniejsze przy projektowaniu AI dla finansów lub zdrowia?', en: 'What matters most when designing AI for finance or healthcare?' },
+    options: [
+      { pl: 'Zgodność z regulacjami (EU AI Act, GDPR, MDR)', en: 'Regulatory compliance (EU AI Act, GDPR, MDR)', scores: { ETHIC: 3 } },
+      { pl: 'Audytowalność - każda decyzja AI musi być wyjaśnialna', en: 'Auditability - every AI decision must be explainable', scores: { ETHIC: 3, SYS: 1 } },
+      { pl: 'Human-in-the-loop dla kluczowych decyzji', en: 'Human-in-the-loop for critical decisions', scores: { ETHIC: 2, CONV: 1 } },
+      { pl: 'Minimalizacja ryzyka przed maksymalizacją możliwości', en: 'Minimizing risk before maximizing capabilities', scores: { ETHIC: 3 } },
+    ]
+  },
+  Q6D: {
+    phase: 'adaptive', path: 'D', format: 'lista',
+    cat: { pl: 'TESTOWANIE BIAS', en: 'BIAS TESTING' },
+    text: { pl: 'Jak testujesz bias w interfejsach AI?', en: 'How do you test for bias in AI interfaces?' },
+    options: [
+      { pl: 'Diversity testing - testuję z grupami reprezentującymi różne środowiska', en: 'Diversity testing - I test with groups representing different backgrounds', scores: { ETHIC: 3 } },
+      { pl: 'Audyt danych treningowych z ekspertami domenowymi', en: 'Training data audit with domain experts', scores: { ETHIC: 2, BUILD: 1 } },
+      { pl: 'Red-teaming - próbuję wyciągnąć szkodliwe zachowania systemu', en: 'Red-teaming - I try to elicit harmful system behaviors', scores: { ETHIC: 3, BUILD: 1 } },
+      { pl: 'Monitoring produkcyjny i analiza skarg użytkowników', en: 'Production monitoring and user complaint analysis', scores: { ETHIC: 2, SYS: 1 } },
+    ]
+  },
+  Q7D: {
+    phase: 'adaptive', path: 'D', format: 'lista',
+    cat: { pl: 'MODEL KARIERY', en: 'CAREER MODEL' },
+    text: { pl: 'Jak widzisz swoją rolę w ekosystemie etyki AI?', en: 'How do you see your role in the AI ethics ecosystem?' },
+    options: [
+      { pl: 'Wewnętrzny konsultant - buduję kulturę etyki w organizacji', en: 'Internal consultant - I build an ethics culture within the organization', scores: { ETHIC: 2, SYS: 1 } },
+      { pl: 'Zewnętrzny ekspert - audytuję różne firmy i branże', en: 'External expert - I audit different companies and industries', scores: { ETHIC: 3 } },
+      { pl: 'Regulator lub policy-maker - tworzę standardy dla branży', en: 'Regulator or policy-maker - I create industry standards', scores: { ETHIC: 2, SYS: 2 } },
+      { pl: 'Badacz akademicki - rozwijam metody testowania AI', en: 'Academic researcher - I develop AI testing methods', scores: { ETHIC: 2, BUILD: 1 } },
+    ]
+  },
+  Q4E: {
+    phase: 'adaptive', path: 'E', format: 'lista',
+    cat: { pl: 'MEDIUM PRZYSZŁOŚCI', en: 'FUTURE MEDIUM' },
+    text: { pl: 'Które medium najbardziej Cię ekscytuje?', en: 'Which medium excites you most?' },
+    options: [
+      { pl: 'AR w przestrzeni fizycznej - nakładanie warstw cyfrowych na świat', en: 'AR in physical space - layering digital on the physical world', scores: { IMMERSE: 3 } },
+      { pl: 'VR - pełne zanurzenie w stworzonych środowiskach', en: 'VR - full immersion in created environments', scores: { IMMERSE: 3 } },
+      { pl: 'Spatial computing - Apple Vision Pro i podobne', en: 'Spatial computing - Apple Vision Pro and similar', scores: { IMMERSE: 2, BUILD: 1 } },
+      { pl: 'Generatywne 3D i real-time rendering z AI', en: 'Generative 3D and real-time rendering with AI', scores: { IMMERSE: 2, BUILD: 2 } },
+    ]
+  },
+  Q5E: {
+    phase: 'adaptive', path: 'E', format: 'lista',
+    cat: { pl: 'KOMFORT W VR', en: 'VR COMFORT' },
+    text: { pl: 'Jak projektujesz dla komfortu w środowiskach VR?', en: 'How do you design for comfort in VR environments?' },
+    options: [
+      { pl: 'Zaczynam od motion sickness - eliminuję przyczyny fizycznych dolegliwości', en: 'I start with motion sickness - I eliminate causes of physical discomfort', scores: { IMMERSE: 3 } },
+      { pl: 'Mapuję kognitywne granice - ile bodźców użytkownik może przetworzyć', en: 'I map cognitive limits - how many stimuli a user can process', scores: { IMMERSE: 2, ETHIC: 1 } },
+      { pl: 'Buduję opcje stopniowania intensywności doświadczenia', en: 'I build options to gradually increase experience intensity', scores: { IMMERSE: 2, BUILD: 1 } },
+      { pl: 'Testuję z różnymi grupami - komfort jest subiektywny', en: 'I test with diverse groups - comfort is subjective', scores: { IMMERSE: 2, CONV: 1 } },
+    ]
+  },
+  Q6E: {
+    phase: 'adaptive', path: 'E', format: 'lista',
+    cat: { pl: 'NARRACJA VS INTERAKCJA', en: 'NARRATIVE VS INTERACTION' },
+    text: { pl: 'Co wolisz: narrację czy interaktywność?', en: 'What do you prefer: narrative or interactivity?' },
+    options: [
+      { pl: 'Narrację - prowadzę użytkownika przez zaplanowane doświadczenie', en: 'Narrative - I guide the user through a planned experience', scores: { IMMERSE: 2, CONV: 1 } },
+      { pl: 'Interaktywność - użytkownik sam odkrywa i tworzy ścieżkę', en: 'Interactivity - the user discovers and creates their own path', scores: { IMMERSE: 2, BUILD: 1 } },
+      { pl: 'Połączenie - narracja jako szkielet, wolność w detalach', en: 'Both - narrative as a framework, freedom in the details', scores: { IMMERSE: 3 } },
+      { pl: 'Zależy od kontekstu i celu doświadczenia', en: 'Depends on the context and goal of the experience', scores: { IMMERSE: 1, SYS: 2 } },
+    ]
+  },
+  Q7E: {
+    phase: 'adaptive', path: 'E', format: 'lista',
+    cat: { pl: 'GENERATYWNE AI W 3D', en: 'GENERATIVE AI IN 3D' },
+    text: { pl: 'Jak AI generatywne zmienia Twój workflow w projektach 3D?', en: 'How does generative AI change your workflow in 3D projects?' },
+    options: [
+      { pl: 'Generuję tekstury i assety zamiast modelować ręcznie', en: 'I generate textures and assets instead of modeling manually', scores: { IMMERSE: 3, BUILD: 1 } },
+      { pl: 'Tworzę proceduralne środowiska, które AI adaptuje w runtime', en: 'I create procedural environments that AI adapts at runtime', scores: { IMMERSE: 2, BUILD: 2 } },
+      { pl: 'Używam AI do szybkiego prototypowania konceptów przestrzennych', en: 'I use AI for rapid prototyping of spatial concepts', scores: { IMMERSE: 2, BUILD: 1 } },
+      { pl: 'Jeszcze tego nie robię, ale chcę się nauczyć', en: 'I do not do this yet, but I want to learn', scores: { IMMERSE: 1, BUILD: 1 } },
+    ]
+  },
+  Q8: {
+    phase: 'universal', format: 'lista',
+    cat: { pl: 'MOTYWACJA ZAWODOWA', en: 'PROFESSIONAL MOTIVATION' },
+    text: { pl: 'Co motywuje Cię zawodowo najbardziej?', en: 'What motivates you professionally most?' },
+    options: [
+      { pl: 'Wpływ na codzienne życie użytkowników - widoczna zmiana', en: 'Impact on users\' daily lives - visible change', scores: { CONV: 1, ETHIC: 1 } },
+      { pl: 'Dostarczanie mierzalnych wyników biznesowych', en: 'Delivering measurable business results', scores: { BUILD: 1, SYS: 1 } },
+      { pl: 'Bycie pionierem nowych technologii i doświadczeń', en: 'Being a pioneer of new technologies and experiences', scores: { IMMERSE: 2 } },
+      { pl: 'Budowanie sprawiedliwszej i bezpieczniejszej AI', en: 'Building a fairer and safer AI', scores: { ETHIC: 2 } },
+      { pl: 'Prowadzenie ludzi i transformacja organizacji', en: 'Leading people and transforming organizations', scores: { SYS: 2 } },
+    ]
+  },
+  Q9: {
+    phase: 'universal', format: 'lista',
+    cat: { pl: 'STYL WSPÓŁPRACY', en: 'COLLABORATION STYLE' },
+    text: { pl: 'Jak wolisz pracować?', en: 'How do you prefer to work?' },
+    options: [
+      { pl: 'Sam ze skomplikowanym problemem - skupienie i głęboka praca', en: 'Alone with a complex problem - focus and deep work', scores: { BUILD: 2, IMMERSE: 1 } },
+      { pl: 'Z użytkownikami 1:1 - badania i bezpośredni kontakt', en: 'With users 1-on-1 - research and direct contact', scores: { CONV: 2, ETHIC: 1 } },
+      { pl: 'Na styku designu, biznesu i technologii', en: 'At the intersection of design, business and technology', scores: { SYS: 2 } },
+      { pl: 'W interdyscyplinarnym zespole jako koordynator i facilitator', en: 'In a cross-functional team as coordinator and facilitator', scores: { SYS: 1, CONV: 1 } },
+    ]
+  },
+  Q10: {
+    phase: 'universal', format: 'lista',
+    cat: { pl: 'HORYZONT 5 LAT', en: '5-YEAR HORIZON' },
+    text: { pl: 'Za 5 lat widzisz siebie jako...', en: 'In 5 years you see yourself as...' },
+    options: [
+      { pl: 'Specjalista od dialogów AI - go-to person w dużej firmie produktowej', en: 'AI dialogue specialist - the go-to person in a large product company', scores: { CONV: 3 } },
+      { pl: 'Designer, który bierze projekt i go buduje - end-to-end', en: 'A designer who takes a project and builds it end-to-end', scores: { BUILD: 3 } },
+      { pl: 'Lider kształtujący AI strategię i roadmapę produktową', en: 'A leader shaping AI strategy and product roadmap', scores: { SYS: 2, BUILD: 1 } },
+      { pl: 'Konsultant lub audytor etyki AI - niezależny ekspert', en: 'AI ethics consultant or auditor - independent expert', scores: { ETHIC: 3 } },
+      { pl: 'Designer tworzący światy AR i VR zasilane przez AI', en: 'A designer creating AR and VR worlds powered by AI', scores: { IMMERSE: 3 } },
+      { pl: 'Manager transformujący organizacje przez AI', en: 'A manager transforming organizations through AI', scores: { SYS: 3 } },
+    ]
+  },
+};
+
+/* ============================================================
+   RESULT PROFILES
+   ============================================================ */
+const profiles = {
+  INTERACTION: {
+    name: { pl: 'AI Interaction Designer', en: 'AI Interaction Designer' },
+    tagline: { pl: 'Głos między człowiekiem a maszyną', en: 'The voice between human and machine' },
+    desc: { pl: 'Projektujesz dialogi, agenty i systemy konwersacyjne. Rozumiesz jak AI powinna brzmieć, reagować i budować zaufanie w rozmowie. To jedna z najszybciej rosnących specjalizacji - każdy produkt z AI potrzebuje kogoś, kto zadba o jakość tego dialogu.', en: 'You design dialogues, agents and conversational systems. You understand how AI should sound, respond and build trust in conversation. This is one of the fastest-growing specializations - every AI product needs someone to ensure dialog quality.' },
+    why: { pl: 'LLM-y weszły do każdego produktu. Ale dobry conversational design to wciąż rzadkość. WEF identyfikuje tę rolę jako kluczową do 2030.', en: 'LLMs entered every product. But good conversational design is still rare. WEF identifies this role as critical through 2030.' },
+    skills: ['CONVERSATIONAL AI', 'DIALOG DESIGN', 'LLM PATTERNS', 'UX WRITING', 'VOICE UX'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'Fundamenty', detail: 'Naucz się prompt engineeringu - skorzystaj z Anthropic Docs, Learn Prompting lub kursu DeepLearning.AI. Przetestuj 3 różne chatboty pod kątem UX: oceniaj spójność tonu, obsługę błędów i fallback flows. Zbuduj portfolio co najmniej 5 conversation flows w Figma, Voiceflow lub Botpress. Udokumentuj wzorce problemów i swoje rozwiązania.' },
+        { phase: '3-12 MIESIĘCY', title: 'Pierwsza specjalizacja', detail: 'Zaproponuj redesign dialogów w obecnym produkcie - zmierz wyniki przed i po (task completion, error rate). Dołącz do projektu z LLM lub agentem AI, używając OpenAI API, Claude lub Gemini. Naucz się projektować error states i graceful degradation. Zacznij śledzić konferencje NLP/Conversational AI (SIGDIAL, CUI).' },
+        { phase: '1-3 LATA', title: 'Ekspert domeny', detail: 'Prowadź warsztaty z conversation design - dla zespołu i dla klientów zewnętrznych. Buduj wewnętrzne standardy i pattern library dla dialogów AI, w tym guidelines dla tonu i personas. Wejdź w emerging obszary: multimodal interfaces i agentowe systemy wielokrokowe. Publikuj case studies na Medium lub własnym blogu i buduj markę eksperta w społeczności.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'Foundations', detail: 'Learn prompt engineering using Anthropic Docs, Learn Prompting or a DeepLearning.AI course. Test 3 different chatbots from a UX perspective - evaluate tone consistency, error handling and fallback flows. Build a portfolio of at least 5 conversation flows in Figma, Voiceflow or Botpress. Document failure patterns and your design solutions.' },
+        { phase: '3-12 MONTHS', title: 'First specialization', detail: 'Propose a dialogue redesign in your current product - measure results before and after (task completion, error rate). Join a project using an LLM or AI agent with OpenAI API, Claude or Gemini. Learn to design error states and graceful degradation. Start tracking Conversational AI conferences (SIGDIAL, CUI).' },
+        { phase: '1-3 YEARS', title: 'Domain expert', detail: 'Lead conversation design workshops - both internally and for external clients. Build internal standards and a pattern library for AI dialogues, including tone guidelines and persona frameworks. Enter emerging areas: multimodal interfaces and multi-step agentic systems. Publish case studies and build your expert brand in the community.' },
+      ],
+    },
+    weights: { CONV: 3, SYS: 1 },
+  },
+  PRODUCT: {
+    name: { pl: 'AI Product Designer', en: 'AI Product Designer' },
+    tagline: { pl: 'Łączysz AI z wartością dla użytkownika', en: 'You connect AI with user value' },
+    desc: { pl: 'Odpowiadasz za funkcje AI w produkcie - od discovery po iteracje po wdrożeniu. Rozumiesz możliwości modeli i potrzeby użytkowników jednocześnie. Autodesk raportuje 3-krotny wzrost zapotrzebowania na tę rolę do 2026.', en: 'You own AI features in the product - from discovery to post-launch iteration. You understand both model capabilities and user needs. Autodesk reports 3x demand growth for this role by 2026.' },
+    why: { pl: 'Figma State of the Designer 2026: 78% designerów pracuje z AI, ale tylko 12% rozumie cykl życia funkcji AI. Lukę wypełniają AI Product Designerzy.', en: 'Figma State of the Designer 2026: 78% of designers work with AI, but only 12% understand the AI feature lifecycle. AI Product Designers fill this gap.' },
+    skills: ['AI FEATURE DESIGN', 'DISCOVERY', 'PRODUCT METRICS', 'ITERATION', 'AI LITERACY'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'AI literacy', detail: 'Zrozum możliwości i ograniczenia LLM-ów - przejdź kurs "AI for Everyone" (Coursera) lub "Practical AI" (fast.ai). Przejrzyj jak 3 produkty implementują AI i oceń ich UX: onboarding, obsługa błędów, komunikacja niepewności. Stwórz własny framework oceny AI UX i udokumentuj go w Notion lub Figma. Zidentyfikuj jedną funkcję AI w swoim obecnym produkcie, którą możesz poprawić.' },
+        { phase: '3-12 MIESIĘCY', title: 'Własny projekt AI', detail: 'Zaprojektuj i przetestuj funkcję AI od discovery do wdrożenia, używając podwójnego diamentu z rozszerzeniem o AI constraints. Mierz jej wpływ na retencję i satysfakcję - postaw konkretne metryki przed startem. Naucz się pisać AI product briefs i prompty systemowe. Zdobądź praktykę z narzędziami: Productboard, Maze, Amplitude.' },
+        { phase: '1-3 LATA', title: 'Ownership i skala', detail: 'Stań się głównym designerem odpowiedzialnym za AI roadmapę produktu - od strategii po specyfikacje. Mentoruj innych designerów w zakresie AI literacy i feature design. Buduj wewnętrzne standardy AI UX dla zespołu: guidelines, pattern library i decision frameworks. Reprezentuj perspektywę UX na poziomie C-suite w decyzjach o wdrożeniu AI.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'AI literacy', detail: 'Understand LLM capabilities and limitations - take "AI for Everyone" (Coursera) or "Practical AI" (fast.ai). Review how 3 products implement AI and evaluate their UX: onboarding, error handling, uncertainty communication. Build your own AI UX evaluation framework and document it. Identify one AI feature in your current product you could improve.' },
+        { phase: '3-12 MONTHS', title: 'Own AI project', detail: 'Design and test an AI feature from discovery to launch, using a double diamond extended with AI constraints. Set concrete metrics before you start and measure impact on retention and satisfaction. Learn to write AI product briefs and system prompts. Get hands-on with: Productboard, Maze, Amplitude.' },
+        { phase: '1-3 YEARS', title: 'Ownership and scale', detail: 'Become the lead designer owning the product\'s AI roadmap - from strategy to specs. Mentor other designers in AI literacy and feature design. Build internal AI UX standards: guidelines, pattern library and decision frameworks. Represent the UX perspective at C-suite level in AI deployment decisions.' },
+      ],
+    },
+    weights: { BUILD: 2, SYS: 2, CONV: 1 },
+  },
+  TECHNOLOGIST: {
+    name: { pl: 'Design Technologist', en: 'Design Technologist' },
+    tagline: { pl: 'Budujesz to, co projektujesz', en: 'You build what you design' },
+    desc: { pl: 'Łączysz design z implementacją. Budujesz działające prototypy, systemy komponentów i integracje z API - i używasz AI jako narzędzia przyspieszającego każdy etap. Ta rola eliminuje tradycyjny podział na "design" i "dev".', en: 'You bridge design and implementation. You build working prototypes, component systems and API integrations - using AI as a tool that accelerates every stage. This role eliminates the traditional design vs. dev divide.' },
+    why: { pl: 'AI coding tools skróciły dystans między designerem a developerem. Design Technologiści którzy umieją korzystać z Cursor lub Copilot stają się 5-krotnie bardziej produktywni.', en: 'AI coding tools shortened the distance between designer and developer. Design Technologists who use Cursor or Copilot become 5x more productive.' },
+    skills: ['AI PROTOTYPING', 'NO-CODE BUILD', 'FRONT-END', 'API INTEGRATION', 'COMPONENT SYSTEMS'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'Narzędzia AI', detail: 'Zainstaluj i opanuj Cursor lub GitHub Copilot - codziennie używaj AI do pisania kodu. Zbuduj 2 działające prototypy w kodzie (React lub HTML/CSS/JS) używając AI jako pary programistycznej. Naucz się podstaw: Git, terminal, API REST. Dokumentuj co działa, a co nie - to Twoje pierwsze lekcje pair-programmingu z AI.' },
+        { phase: '3-12 MIESIĘCY', title: 'Stack i komponenty', detail: 'Zbuduj reużywalny design system w kodzie - komponenty React lub Web Components z Storybook. Zintegruj co najmniej jedno API modelu językowego (OpenAI, Anthropic lub Hugging Face) w działającym projekcie. Naucz się deployować na Vercel lub Netlify. Stwórz portfolio z linkami do działających projektów, nie tylko Figma mockupów.' },
+        { phase: '1-3 LATA', title: 'Autonomia techniczna', detail: 'Twórz od designu do deploymentu samodzielnie - pełny stack od wireframu do produkcji. Stań się pomostem między teamem designu a inżynierią: tłumacz wymagania UX na implementację i odwrotnie. Rozwijaj umiejętności performance optymalizacji i accesibility (a11y). Mentoruj designerów wchodzących w technical design i buduj wewnętrzne standardy prototypowania.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'AI tools', detail: 'Install and master Cursor or GitHub Copilot - use AI daily for writing code. Build 2 working prototypes in code (React or HTML/CSS/JS) using AI as a pair programmer. Learn the basics: Git, terminal, REST APIs. Document what works and what doesn\'t - these are your first lessons in AI pair-programming.' },
+        { phase: '3-12 MONTHS', title: 'Stack and components', detail: 'Build a reusable design system in code - React components or Web Components with Storybook. Integrate at least one language model API (OpenAI, Anthropic or Hugging Face) in a working project. Learn to deploy on Vercel or Netlify. Build a portfolio with links to live projects, not just Figma mockups.' },
+        { phase: '1-3 YEARS', title: 'Technical autonomy', detail: 'Go from design to deployment independently - full stack from wireframe to production. Become the bridge between design and engineering: translate UX requirements into implementation and vice versa. Develop performance optimization and accessibility (a11y) skills. Mentor designers entering technical design and build internal prototyping standards.' },
+      ],
+    },
+    weights: { BUILD: 4, CONV: 1 },
+  },
+  STRATEGIST: {
+    name: { pl: 'AI UX Strategist', en: 'AI UX Strategist' },
+    tagline: { pl: 'Kształtujesz jak organizacje myślą o AI', en: 'You shape how organizations think about AI' },
+    desc: { pl: 'Widzisz szerszy obraz. Kształtujesz AI roadmapy, łączysz perspektywę designu z biznesową i technologiczną, i pomagasz organizacjom podejmować mądre decyzje o tym, gdzie i jak wdrażać AI. WEF wskazuje silny niedobór tej roli do 2030.', en: 'You see the bigger picture. You shape AI roadmaps, connect design with business and technology perspectives, and help organizations make smart decisions about where and how to deploy AI. WEF points to a strong shortage of this role through 2030.' },
+    why: { pl: 'Organizacje z AI strategią rosną 2-3x szybciej. WEF Future of Jobs 2025: UX Strategist wśród 10 najważniejszych zawodów następnej dekady.', en: 'Organizations with an AI strategy grow 2-3x faster. WEF Future of Jobs 2025: UX Strategist listed among the 10 most important professions of the next decade.' },
+    skills: ['AI STRATEGY', 'GOVERNANCE', 'STAKEHOLDER MGT', 'ROADMAPPING', 'SYSTEMS THINKING'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'AI landscape', detail: 'Przeczytaj "AI Strategy" McKinsey i raporty Gartner AI Hype Cycle. Przeanalizuj AI strategie 3 liderów branży - zidentyfikuj decyzje build vs. buy, governance i metryki sukcesu. Przeprowadź wewnętrzny AI audit swojej organizacji: gdzie AI już działa, gdzie nie i dlaczego. Zbuduj "AI Opportunity Map" jako punkt startowy do rozmów strategicznych.' },
+        { phase: '3-12 MIESIĘCY', title: 'Strategiczny głos', detail: 'Zaproponuj i poprowadź warsztat AI strategy dla swojego zespołu lub klienta - użyj frameworku Jobs-to-be-Done + AI capabilities mapping. Dostarcz konkretną roadmapę z priorytetami, zależnościami i miernikami. Naucz się prezentować rekomendacje AI dla zarządu - language of business risk i ROI. Rozbuduj sieć kontaktów w AI strategii przez LinkedIn i lokalne meetupy.' },
+        { phase: '1-3 LATA', title: 'Lider transformacji', detail: 'Stań się punktem odniesienia dla AI strategy w swojej organizacji lub na rynku konsultingowym. Prowadź programy AI transformation obejmujące kulturę, procesy i narzędzia jednocześnie. Publikuj white papers i przemawia na konferencjach (UX Days, Config, UXDX). Buduj lub dołącz do sieci ekspertów AI strategy - certyfikacja MIT Sloan lub INSEAD AI Strategy.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'AI landscape', detail: 'Read McKinsey "AI Strategy" and Gartner AI Hype Cycle reports. Analyze the AI strategies of 3 industry leaders - identify build vs. buy decisions, governance and success metrics. Conduct an internal AI audit of your organization: where AI already works, where it doesn\'t and why. Build an "AI Opportunity Map" as a starting point for strategic conversations.' },
+        { phase: '3-12 MONTHS', title: 'Strategic voice', detail: 'Propose and lead an AI strategy workshop for your team or client - use a Jobs-to-be-Done + AI capabilities mapping framework. Deliver a concrete roadmap with priorities, dependencies and metrics. Learn to present AI recommendations to the board - in the language of business risk and ROI. Expand your AI strategy network through LinkedIn and local meetups.' },
+        { phase: '1-3 YEARS', title: 'Transformation leader', detail: 'Become the reference point for AI strategy in your organization or the consulting market. Lead AI transformation programs covering culture, processes and tools simultaneously. Publish white papers and speak at conferences (Config, UXDX, Interaction). Build or join an AI strategy expert network - consider MIT Sloan or INSEAD AI Strategy certification.' },
+      ],
+    },
+    weights: { SYS: 4, BUILD: 1 },
+  },
+  ETHICS: {
+    name: { pl: 'AI Ethics UX Consultant', en: 'AI Ethics UX Consultant' },
+    tagline: { pl: 'Pilnujesz, żeby AI była dla ludzi', en: 'You ensure AI is built for people' },
+    desc: { pl: 'Audytujesz systemy AI pod kątem fairness, bias i zgodności z regulacjami. Tworzysz wytyczne etyczne dla zespołów produktowych. EU AI Act stworzył ogromne zapotrzebowanie na ekspertów łączących UX z wiedzą prawno-etyczną.', en: 'You audit AI systems for fairness, bias and regulatory compliance. You create ethical guidelines for product teams. The EU AI Act created massive demand for experts combining UX with legal and ethical expertise.' },
+    why: { pl: 'EU AI Act wszedł w życie w 2024. Do 2027 wszystkie firmy kategorii High-Risk muszą mieć wdrożone procesy audytu. Specjalistów brakuje.', en: 'EU AI Act came into force in 2024. By 2027 all High-Risk category companies must have audit processes in place. Specialists are in short supply.' },
+    skills: ['BIAS TESTING', 'EU AI ACT', 'TRANSPARENCY UX', 'RED-TEAMING', 'IMPACT ASSESSMENT'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'Prawo i teoria', detail: 'Przejrzyj EU AI Act (szczególnie Annexes dotyczące High-Risk AI) i NIST AI RMF - oba są dostępne bezpłatnie online. Ukończ kurs "AI Ethics" na edX (Harvard) lub "Responsible AI" na Coursera. Przeprowadź analizę fairness dla jednej funkcji AI w swoim produkcie używając narzędzi IBM Fairness 360 lub Google What-If Tool. Udokumentuj wyniki i propozycje remediacji.' },
+        { phase: '3-12 MIESIĘCY', title: 'Praktyka audytu', detail: 'Przeprowadź red-teaming sesję dla systemu AI w swojej organizacji - zidentyfikuj minimum 10 scenariuszy nadużyć lub błędów. Stwórz wewnętrzne wytyczne etyczne dla zespołu: checklist AI launch, privacy impact assessment i bias testing protokół. Naucz się narzędzi: Hugging Face Model Cards, Datasheets for Datasets, Microsoft Responsible AI dashboard. Zbuduj sieć przez AlgorithmWatch i AI Now Institute.' },
+        { phase: '1-3 LATA', title: 'Ekspert rynkowy', detail: 'Zdobądź certyfikację w AI governance - IAPP AI Governance Professional lub IEEE Certified AI Ethics Professional. Oferuj zewnętrzne audyty AI dla firm zobligowanych przez EU AI Act (wejście w życie 2026-2027). Buduj reputację eksperta przez publikacje, webinary i udział w konsultacjach regulacyjnych. Rozważ specjalizację sektorową: fintech, medtech lub systemy HR.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'Law and theory', detail: 'Review the EU AI Act (especially Annexes on High-Risk AI) and NIST AI RMF - both available free online. Complete the "AI Ethics" course on edX (Harvard) or "Responsible AI" on Coursera. Conduct a fairness analysis for one AI feature in your product using IBM Fairness 360 or Google What-If Tool. Document findings and remediation proposals.' },
+        { phase: '3-12 MONTHS', title: 'Audit practice', detail: 'Run a red-teaming session for an AI system in your organization - identify at least 10 abuse or failure scenarios. Create internal ethical guidelines for your team: AI launch checklist, privacy impact assessment and bias testing protocol. Learn the tools: Hugging Face Model Cards, Datasheets for Datasets, Microsoft Responsible AI dashboard. Build your network through AlgorithmWatch and the AI Now Institute.' },
+        { phase: '1-3 YEARS', title: 'Market expert', detail: 'Get certified in AI governance - IAPP AI Governance Professional or IEEE Certified AI Ethics Professional. Offer external AI audits for companies obligated by the EU AI Act (enforcement from 2026-2027). Build your expert reputation through publications, webinars and participation in regulatory consultations. Consider sector specialization: fintech, medtech or HR systems.' },
+      ],
+    },
+    weights: { ETHIC: 5, CONV: 1, SYS: 1 },
+  },
+  IMMERSIVE: {
+    name: { pl: 'Immersive Experience Architect', en: 'Immersive Experience Architect' },
+    tagline: { pl: 'Projektujesz światy, nie ekrany', en: 'You design worlds, not screens' },
+    desc: { pl: 'Tworzysz środowiska AR i VR zasilane generatywną AI. Projektujesz przestrzenne narracje i interakcje bez tradycyjnych ekranów. Spatial computing to jeden z najbardziej ekscytujących frontierów designu - i jeden z najmniej zatłoczonych.', en: 'You create AR and VR environments powered by generative AI. You design spatial narratives and interactions beyond traditional screens. Spatial computing is one of the most exciting design frontiers - and one of the least crowded.' },
+    why: { pl: 'Market AR/VR osiągnie $300B do 2030 (IDC). Generatywna AI obniża barierę wejścia - nie potrzebujesz już studia 3D, żeby tworzyć immersywne środowiska.', en: 'The AR/VR market will reach $300B by 2030 (IDC). Generative AI lowers the barrier - you no longer need a 3D studio to create immersive environments.' },
+    skills: ['AR/VR DESIGN', 'SPATIAL UX', 'GENERATIVE 3D', 'WORLD BUILDING', 'HAPTIC DESIGN'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'Wejście w spatial', detail: 'Zacznij od Meta Quest 3 (przystępniejszy cenowo) lub Apple Vision Pro developer kit. Przejdź kurs Unity XR lub A-Frame/WebXR - obydwa są dostępne bezpłatnie. Zainstaluj Figma VR i SplineAI, żeby prototypować spatial UI bez kodu. Dołącz do społeczności: AWE (Augmented World Expo) Discord i Meta Horizon Developers Forum.' },
+        { phase: '3-12 MIESIĘCY', title: 'Pierwszy projekt AR/VR', detail: 'Zbuduj interaktywne doświadczenie AR/VR łączące spatial UI z elementem generatywnego AI - np. asystent głosowy w środowisku 3D lub personalizowana przestrzeń nauki. Użyj Blender lub Spline do tworzenia assets, Eleven Labs lub Whisper do głosu. Pokaż projekt na portfolio z nagraniem video. Weź udział w jednym gamejamie lub hackathonie XR.' },
+        { phase: '1-3 LATA', title: 'Specjalista spatial', detail: 'Specjalizuj się w wybranej branży: edukacja (XR learning environments), retail (virtual try-on) lub medycyna (surgical AR). Nawiąż współpracę z hardware partnerami - Meta, Apple, Microsoft HoloLens lub Snap Spectacles. Śledzić emerging technologie: neurointerfejsy i haptic feedback. Certyfikuj się: Unity Certified Expert AR/VR lub Meta Spark AR Certificate.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'Enter spatial', detail: 'Start with Meta Quest 3 (more affordable) or Apple Vision Pro developer kit. Take a Unity XR or A-Frame/WebXR course - both available for free. Install Figma VR and SplineAI to prototype spatial UI without code. Join the community: AWE (Augmented World Expo) Discord and Meta Horizon Developers Forum.' },
+        { phase: '3-12 MONTHS', title: 'First AR/VR project', detail: 'Build an interactive AR/VR experience combining spatial UI with a generative AI element - e.g. a voice assistant in a 3D environment or a personalized learning space. Use Blender or Spline for assets, Eleven Labs or Whisper for voice. Show the project in your portfolio with a video recording. Participate in one XR gamejam or hackathon.' },
+        { phase: '1-3 YEARS', title: 'Spatial specialist', detail: 'Specialize in a chosen industry: education (XR learning environments), retail (virtual try-on) or medicine (surgical AR). Establish partnerships with hardware partners - Meta, Apple, Microsoft HoloLens or Snap Spectacles. Track emerging technologies: neural interfaces and haptic feedback. Get certified: Unity Certified Expert AR/VR or Meta Spark AR Certificate.' },
+      ],
+    },
+    weights: { IMMERSE: 5, BUILD: 1 },
+  },
+  LEADER: {
+    name: { pl: 'AI-Augmented Design Leader', en: 'AI-Augmented Design Leader' },
+    tagline: { pl: 'Prowadzisz transformację przez AI', en: 'You lead transformation through AI' },
+    desc: { pl: 'Zarządzasz transformacją organizacji przez AI. Budujesz interdyscyplinarne zespoły, kształtujesz kulturę projektowania z AI i pomagasz organizacjom stać się AI-native. To rola dla designerów z ambicjami liderskimi i szeroką perspektywą.', en: 'You lead organizational transformation through AI. You build cross-disciplinary teams, shape a culture of designing with AI, and help organizations become AI-native. This is a role for designers with leadership ambitions and a broad perspective.' },
+    why: { pl: 'McKinsey 2025: firmy z silnym AI Design Leadership wdrażają AI 4x szybciej. Rola ta istniała 3 lata temu marginalnie - dziś jest w top 5 poszukiwanych kompetencji w Fortune 500.', en: 'McKinsey 2025: companies with strong AI Design Leadership deploy AI 4x faster. This role barely existed 3 years ago - today it is in the top 5 most sought-after design competencies in the Fortune 500.' },
+    skills: ['AI LEADERSHIP', 'TEAM BUILDING', 'ORG TRANSFORMATION', 'VISION SETTING', 'CHANGE MGMT'],
+    roadmap: {
+      pl: [
+        { phase: '0-3 MIESIĄCE', title: 'Liderska tożsamość', detail: 'Oceń swój obecny wpływ na kierunek AI w organizacji - przeprowadź "stakeholder mapping" i zidentyfikuj decydentów. Przeczytaj "The Lean AI Startup" lub "Human Compatible" (Russell) dla kontekstu strategicznego. Stwórz swój "AI Leadership Manifesto" - 5 zasad, którymi kierujesz się w decyzjach o AI w designie. Zidentyfikuj 2-3 inicjatywy AI gdzie możesz zwiększyć swój zakres wpływu.' },
+        { phase: '3-12 MIESIĘCY', title: 'Inicjatywa AI', detail: 'Zaproponuj i poprowadź inicjatywę AI transformation - zdefiniuj scope, stakeholders i success metrics przed startem. Zbuduj cross-functional team łączący design, engineering i product. Użyj DACI framework do jasnego podziału ról decyzyjnych w projekcie AI. Mierz nie tylko output (dostarczone features), ale outcome (zmiana zachowania użytkowników i wskaźniki biznesowe).' },
+        { phase: '1-3 LATA', title: 'Lider rynkowy', detail: 'Zarządzaj design teamem z AI-native kulturą - każdy designer ma AI w swoim codziennym workflow. Buduj procesy: AI design sprints, ethical review gates i knowledge sharing rituals. Buduj zewnętrzną reputację przez konferencje (Leading Design, IDEO Design In Tech), publikacje i podcasty. Rozważ dołączenie do advisory boards startupów AI lub programów mentoringowych dla przyszłych liderów designu.' },
+      ],
+      en: [
+        { phase: '0-3 MONTHS', title: 'Leadership identity', detail: 'Evaluate your current influence on AI direction - conduct a stakeholder mapping and identify decision-makers. Read "The Lean AI Startup" or "Human Compatible" (Russell) for strategic context. Create your "AI Leadership Manifesto" - 5 principles guiding your AI design decisions. Identify 2-3 AI initiatives where you can expand your scope of influence.' },
+        { phase: '3-12 MONTHS', title: 'AI initiative', detail: 'Propose and lead an AI transformation initiative - define scope, stakeholders and success metrics before you start. Build a cross-functional team connecting design, engineering and product. Use the DACI framework for clear decision ownership in AI projects. Measure not just output (delivered features) but outcome (user behavior change and business metrics).' },
+        { phase: '1-3 YEARS', title: 'Market leader', detail: 'Run a design team with an AI-native culture - every designer has AI in their daily workflow. Build processes: AI design sprints, ethical review gates and knowledge sharing rituals. Build an external reputation through conferences (Leading Design, IDEO Design In Tech), publications and podcasts. Consider joining advisory boards of AI startups or mentoring programs for future design leaders.' },
+      ],
+    },
+    weights: { SYS: 3, ETHIC: 1, CONV: 1 },
+  },
+};
+
+/* ============================================================
+   LANGUAGE SWITCH
+   ============================================================ */
+function setLang(lang) {
+  state.lang = lang;
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = i18n[lang][key];
+    if (val === undefined) return;
+    if (val.includes('\n')) {
+      el.innerHTML = val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  const emailInput = document.getElementById('email-input');
+  if (emailInput) emailInput.placeholder = lang === 'pl' ? 'twoj@email.pl' : 'your@email.com';
+
+  syncLangButtons();
+  renderRoles();
+  if (document.getElementById('preview-profile')) rotatePreview();
+
+  // Re-render quiz/result if active
+  if (document.getElementById('screen-quiz').style.display !== 'none') {
+    renderCurrentQuestion();
+  }
+  if (document.getElementById('screen-result').style.display !== 'none') {
+    renderResult(lastResult);
+  }
+}
+
+/* ============================================================
+   ROLE CARDS
+   ============================================================ */
+const profileAccents = {
+  INTERACTION:  '#6b38d4',
+  PRODUCT:      '#a43073',
+  TECHNOLOGIST: '#006947',
+  STRATEGIST:   '#0369a1',
+  ETHICS:       '#6366F1',
+  IMMERSIVE:    '#d97706',
+  LEADER:       '#7c3aed',
+};
+
+const roleKeys = ['INTERACTION', 'PRODUCT', 'TECHNOLOGIST', 'STRATEGIST', 'ETHICS', 'IMMERSIVE', 'LEADER'];
+
+function renderRoles() {
+  const grid = document.getElementById('roles-grid');
+  const lang = state.lang;
+
+  grid.innerHTML = roles.map((r, i) => {
+    const accent = profileAccents[roleKeys[i]] || 'var(--primary)';
+    return `
+    <div class="role-card" style="transition-delay:${i * 0.07}s;--card-accent:${accent}" data-card>
+      <div class="role-num">${r.num}</div>
+      <h3 class="role-name">${r.name[lang]}</h3>
+      <p class="role-desc">${r.desc[lang]}</p>
+      <div class="chip-row">
+        ${r.chips.map(c => `<span class="chip">${c}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  observeCards();
+}
+
+function observeCards() {
+  const cards = document.querySelectorAll('[data-card]');
+  if (!('IntersectionObserver' in window)) {
+    cards.forEach(c => c.classList.add('visible'));
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  cards.forEach(c => io.observe(c));
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal() {
+  const overlay = document.getElementById('modal');
+  overlay.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('email-input').focus(), 320);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function launchQuiz() {
+  state.email      = document.getElementById('email-input').value;
+  state.newsletter = document.getElementById('nl-check').checked;
+
+  if (state.newsletter && state.email) {
+    sendToMailerLite(state.email).catch(() => {});
+  }
+
+  closeModal();
+  // TODO: replace with quiz screen transition
+  navigateToQuiz();
+}
+
+async function sendToMailerLite(email) {
+  await fetch('https://connect.mailerlite.com/api/subscribers', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${MAILERLITE_API_KEY}`,
+    },
+    body: JSON.stringify({ email, groups: [MAILERLITE_GROUP_ID] }),
+  });
+}
+
+/* ============================================================
+   QUIZ STATE
+   ============================================================ */
+let quizState = {
+  currentQ: 0,
+  scores: { CONV: 0, BUILD: 0, SYS: 0, ETHIC: 0, IMMERSE: 0 },
+  path: null,
+  sequence: [],
+  selected: null,
+  history: [],
+};
+
+let lastResult = null;
+
+function syncLangButtons() {
+  const lang = state.lang;
+  [['btn-pl', 'btn-en'], ['btn-pl-q', 'btn-en-q'], ['btn-pl-r', 'btn-en-r']].forEach(([pl, en]) => {
+    const elPl = document.getElementById(pl);
+    const elEn = document.getElementById(en);
+    if (elPl) elPl.classList.toggle('active', lang === 'pl');
+    if (elEn) elEn.classList.toggle('active', lang === 'en');
+  });
+}
+
+function buildSequence(path) {
+  return ['Q1', 'Q2', 'Q3', 'Q4'+path, 'Q5'+path, 'Q6'+path, 'Q7'+path, 'Q8', 'Q9', 'Q10'];
+}
+
+function adaptiveRouter() {
+  const s = quizState.scores;
+  const max = Math.max(s.CONV, s.BUILD, s.SYS, s.ETHIC, s.IMMERSE);
+  if (s.ETHIC === max) return 'D';
+  if (s.IMMERSE === max) return 'E';
+  if (s.SYS === max) return 'C';
+  if (s.BUILD === max) return 'B';
+  return 'A';
+}
+
+function scoreAnswer(qId, optionIdx) {
+  const opt = questions[qId].options[optionIdx];
+  for (const [dim, pts] of Object.entries(opt.scores || {})) {
+    quizState.scores[dim] = (quizState.scores[dim] || 0) + pts;
+  }
+}
+
+function undoScore(qId, optionIdx) {
+  const opt = questions[qId].options[optionIdx];
+  for (const [dim, pts] of Object.entries(opt.scores || {})) {
+    quizState.scores[dim] -= pts;
+  }
+}
+
+function calculateResult() {
+  const s = quizState.scores;
+  const ps = {};
+  for (const [key, p] of Object.entries(profiles)) {
+    ps[key] = Object.entries(p.weights).reduce((sum, [dim, w]) => sum + (s[dim] || 0) * w, 0);
+  }
+  const sorted = Object.entries(ps).sort((a, b) => b[1] - a[1]);
+  return { primary: sorted[0][0], secondary: sorted[1][0] };
+}
+
+function navigateToQuiz() {
+  quizState = {
+    currentQ: 0,
+    scores: { CONV: 0, BUILD: 0, SYS: 0, ETHIC: 0, IMMERSE: 0 },
+    path: null,
+    sequence: ['Q1', 'Q2', 'Q3'],
+    selected: null,
+    history: [],
+  };
+
+  document.getElementById('screen-landing').style.display = 'none';
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-quiz').style.display = 'flex';
+  window.scrollTo(0, 0);
+  scatterInto('#screen-quiz', QUIZ_SPOTS);
+  renderCurrentQuestion();
+}
+
+function renderCurrentQuestion() {
+  const qId = quizState.sequence[quizState.currentQ];
+  if (!qId || !questions[qId]) return;
+
+  const q = questions[qId];
+  const lang = state.lang;
+  const total = 10;
+  const num = quizState.currentQ + 1;
+  const pct = Math.round((quizState.currentQ / total) * 100);
+  const isFirst = quizState.currentQ === 0;
+  const isLast = quizState.currentQ === total - 1;
+
+  let optionsHtml = '';
+  if (q.format === 'kart') {
+    optionsHtml = `<div class="cards-grid">
+      ${q.options.map((opt, i) => `
+        <button class="answer-card${quizState.selected === i ? ' selected' : ''}" onclick="selectOption(${i})" type="button">
+          <span class="card-icon">${opt.icon || '◆'}</span>
+          <div class="card-title">${opt.title ? opt.title[lang] : ''}</div>
+          <div class="card-desc">${opt[lang]}</div>
+        </button>
+      `).join('')}
+    </div>`;
+  } else {
+    optionsHtml = `<div class="list-options">
+      ${q.options.map((opt, i) => `
+        <button class="list-option${quizState.selected === i ? ' selected' : ''}" onclick="selectOption(${i})" type="button">
+          <span class="radio-dot"></span>
+          <span class="option-text">${opt[lang]}</span>
+        </button>
+      `).join('')}
+    </div>`;
+  }
+
+  const backLabel = lang === 'pl' ? 'Wstecz' : 'Back';
+  const nextLabel = isLast
+    ? (lang === 'pl' ? 'Zobacz wynik' : 'See result')
+    : (lang === 'pl' ? 'Dalej' : 'Next');
+  const qLabel = lang === 'pl' ? `PYTANIE ${num} Z ${total}` : `QUESTION ${num} OF ${total}`;
+  const noteText = lang === 'pl'
+    ? 'System dynamicznie dostosowuje kolejne pytania do Twojego profilu'
+    : 'System dynamically adapts next questions to your profile';
+
+  const content = document.getElementById('quiz-content');
+  content.classList.remove('question-enter');
+  content.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-label">${qLabel}</span>
+        <span class="progress-pct">${pct}%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${pct}%"></div>
+      </div>
+    </div>
+    <span class="q-category">${q.cat[lang]}</span>
+    <p class="q-text">${q.text[lang]}</p>
+    ${optionsHtml}
+    <div class="quiz-nav">
+      <button class="btn-back" onclick="goBack()" ${isFirst ? 'style="visibility:hidden"' : ''}>${backLabel}</button>
+      <button class="btn-next" id="btn-next" onclick="goNext()" ${quizState.selected === null ? 'disabled' : ''}>${nextLabel}</button>
+    </div>
+    <p class="adaptive-note">${noteText}</p>
+  `;
+  requestAnimationFrame(() => content.classList.add('question-enter'));
+}
+
+function selectOption(idx) {
+  quizState.selected = idx;
+  document.querySelectorAll('.answer-card, .list-option').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  const btn = document.getElementById('btn-next');
+  if (btn) btn.disabled = false;
+}
+
+function goNext() {
+  if (quizState.selected === null) return;
+
+  const qId = quizState.sequence[quizState.currentQ];
+  scoreAnswer(qId, quizState.selected);
+  quizState.history.push({ qId, selected: quizState.selected });
+
+  if (quizState.currentQ === 2) {
+    quizState.path = adaptiveRouter();
+    quizState.sequence = buildSequence(quizState.path);
+  }
+
+  quizState.currentQ++;
+  quizState.selected = null;
+
+  if (quizState.currentQ >= 10) {
+    lastResult = calculateResult();
+    document.getElementById('screen-quiz').style.display = 'none';
+    document.getElementById('screen-result').style.display = 'flex';
+    window.scrollTo(0, 0);
+    renderResult(lastResult);
+    return;
+  }
+
+  window.scrollTo(0, 0);
+  renderCurrentQuestion();
+}
+
+function goBack() {
+  if (quizState.history.length === 0) return;
+  const last = quizState.history.pop();
+  undoScore(last.qId, last.selected);
+  quizState.currentQ--;
+  quizState.selected = last.selected;
+  window.scrollTo(0, 0);
+  renderCurrentQuestion();
+}
+
+function renderResult(result) {
+  if (!result) return;
+  const lang = state.lang;
+  const p = profiles[result.primary];
+  const s = profiles[result.secondary];
+  const sc = quizState.scores;
+
+  const roadmapHtml = p.roadmap[lang].map((step, i, arr) => `
+    <div class="roadmap-item">
+      <div class="roadmap-timeline">
+        <div class="roadmap-dot"></div>
+        ${i < arr.length - 1 ? '<div class="roadmap-line"></div>' : ''}
+      </div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase">${step.phase}</div>
+        <div class="roadmap-title">${step.title}</div>
+        <div class="roadmap-detail">${step.detail}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const dimNames = {
+    CONV:    lang === 'pl' ? 'Conversational' : 'Conversational',
+    BUILD:   lang === 'pl' ? 'Technical Build' : 'Technical Build',
+    SYS:     lang === 'pl' ? 'Systems' : 'Systems',
+    ETHIC:   lang === 'pl' ? 'Ethics' : 'Ethics',
+    IMMERSE: lang === 'pl' ? 'Immersive' : 'Immersive',
+  };
+  const maxScore = 24;
+  const dimsHtml = ['CONV', 'BUILD', 'SYS', 'ETHIC', 'IMMERSE'].map(d => {
+    const pct = Math.min(100, Math.round(((sc[d] || 0) / maxScore) * 100));
+    return `<div class="dim-bar-row">
+      <span class="dim-label">${dimNames[d]}</span>
+      <div class="dim-track"><div class="dim-fill" data-target="${pct}%"></div></div>
+      <span class="dim-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  const eyebrow = lang === 'pl' ? 'Twoja przyszłość to:' : 'Your future is:';
+  const dimsLabel = lang === 'pl' ? 'TWÓJ PROFIL' : 'YOUR PROFILE';
+  const whyLabel = lang === 'pl' ? 'DLACZEGO TA ROLA ROŚNIE' : 'WHY THIS ROLE IS GROWING';
+  const skillsLabel = lang === 'pl' ? 'KLUCZOWE UMIEJĘTNOŚCI' : 'KEY SKILLS';
+  const roadmapLabel = lang === 'pl' ? 'PLAN KOMPETENCYJNY' : 'COMPETENCY ROADMAP';
+  const secondaryLabel = lang === 'pl' ? 'MASZ TEŻ CECHY' : 'YOU ALSO HAVE TRAITS OF';
+  const shareLabel = lang === 'pl' ? 'Podziel się wynikiem' : 'Share your result';
+  const restartLabel = lang === 'pl' ? 'Zacznij od nowa' : 'Start over';
+
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-eyebrow">${eyebrow}</div>
+    <h1 class="result-role-name">${p.name[lang]}</h1>
+    <p class="result-desc">${p.desc[lang]}</p>
+    <div class="dim-bars-section">
+      <div class="result-section-label">${dimsLabel}</div>
+      <div class="dim-bars">${dimsHtml}</div>
+    </div>
+    <div class="result-section-label">${whyLabel}</div>
+    <p style="font-size:15px;color:var(--on-surface-var);line-height:1.65;margin-bottom:28px;">${p.why[lang]}</p>
+    <div class="result-section-label">${skillsLabel}</div>
+    <div class="skills-row">${p.skills.map(sk => `<span class="chip">${sk}</span>`).join('')}</div>
+    <div class="result-section-label">${roadmapLabel}</div>
+    <div class="roadmap">${roadmapHtml}</div>
+    <div class="secondary-trait">
+      <div class="secondary-trait-label">${secondaryLabel}</div>
+      <div class="secondary-trait-name">${s.name[lang]}</div>
+      <div class="secondary-trait-desc">${s.tagline[lang]}</div>
+    </div>
+    <div class="result-ctas">
+      <button class="btn-primary" onclick="shareResult()">${shareLabel}</button>
+      <button class="btn-ghost" onclick="restartQuiz()">${restartLabel}</button>
+    </div>
+  `;
+
+  Array.from(document.getElementById('result-content').children).forEach((el, i) => {
+    el.style.animationDelay = `${0.05 + i * 0.09}s`;
+  });
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.dim-fill').forEach(el => {
+      el.style.width = el.dataset.target;
+    });
+  });
+
+  scatterInto('#screen-result', RESULT_SPOTS);
+}
+
+function shareResult() {
+  const lang = state.lang;
+  if (!lastResult) return;
+  const name = profiles[lastResult.primary].name[lang];
+  const text = lang === 'pl'
+    ? `Mój wynik quizu AI Designer: ${name}. Sprawdź swój!`
+    : `My AI Designer quiz result: ${name}. Check yours!`;
+  if (navigator.share) {
+    navigator.share({ title: text, url: window.location.href }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert(lang === 'pl' ? 'Link skopiowany!' : 'Link copied!');
+    });
+  }
+}
+
+function restartQuiz() {
+  lastResult = null;
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-landing').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+document.getElementById('btn-open-modal').addEventListener('click', openModal);
+
+document.getElementById('btn-go').addEventListener('click', launchQuiz);
+
+document.getElementById('btn-skip').addEventListener('click', () => {
+  closeModal();
+  navigateToQuiz();
+});
+
+document.getElementById('email-input').addEventListener('input', function () {
+  document.getElementById('btn-go').disabled = !(this.validity.valid && this.value.length > 0);
+});
+
+document.getElementById('modal').addEventListener('click', function (e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 16);
+}, { passive: true });
+
+/* ============================================================
+   COUNT-UP ANIMATION
+   ============================================================ */
+function countUp(el, targetStr, durationMs) {
+  const d = durationMs || 1100;
+  const isHash = targetStr.startsWith('#');
+  const num = parseInt(targetStr.replace(/\D/g, ''), 10);
+  const suffix = targetStr.replace(/[\d#]/g, '');
+  const prefix = isHash ? '#' : '';
+  if (isNaN(num)) return;
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / d, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = prefix + Math.round(ease * num) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   SCRAPBOOK IMAGES — scattered cut-outs on landing
+   ============================================================ */
+let SCRAP_IMGS = [];
+
+function preloadScrapImgs() {
+  const candidates = Array.from({ length: 20 }, (_, i) => `assets/png/${i + 1}.png`);
+  return Promise.all(
+    candidates.map(src => new Promise(resolve => {
+      const t = new Image();
+      t.onload  = () => resolve(src);
+      t.onerror = () => resolve(null);
+      t.src = src;
+    }))
+  ).then(results => { SCRAP_IMGS = results.filter(Boolean); });
+}
+
+// landing page spots — jeden kontener per spot, żeby nie zachodziły na siebie
+const SCRAP_SPOTS = [
+  { sel: '.hero',     top:  '80px',   right: '-20px',  width: '200px', rot:  '18deg', delay: '0.1s'  },
+  { sel: '#roles',    top:  '-10px',  right: '-20px',  width: '185px', rot:  '14deg', delay: '0.15s' },
+  { sel: '.cta-band', top:  '-20px',  right: '-30px',  width: '160px', rot:  '20deg', delay: '0.1s'  },
+  { sel: '.hero',     bottom:'-25px', left:  '-25px',  width: '175px', rot: '-22deg', delay: '0.25s' },
+  { sel: '#roles',    bottom:'-15px', left:  '-20px',  width: '170px', rot: '-18deg', delay: '0.2s'  },
+];
+
+// spoty dla ekranu quizu
+const QUIZ_SPOTS = [
+  { top: '-18px', right: '-18px', width: '140px', rot:  '16deg', delay: '0.1s' },
+  { bottom: '-18px', left: '-18px', width: '120px', rot: '-14deg', delay: '0.2s' },
+];
+
+// spoty dla ekranu rezultatu
+const RESULT_SPOTS = [
+  { top: '-22px',  right: '-18px', width: '150px', rot:  '20deg', delay: '0.15s' },
+  { bottom: '-18px', left: '-22px', width: '130px', rot: '-18deg', delay: '0.3s'  },
+  { top: '42%',    right: '-28px', width: '110px', rot:  '12deg', delay: '0.25s' },
+];
+
+// wstawia obrazki PNG do konkretnego kontenera (wyczyść poprzednie + dodaj nowe)
+function scatterInto(containerSel, spots, count) {
+  const el = document.querySelector(containerSel);
+  if (!el) return;
+  el.querySelectorAll('.scrap-img').forEach(img => img.remove());
+  const n = (count != null) ? count : (1 + Math.floor(Math.random() * Math.min(2, spots.length)));
+  const chosen = [...spots].sort(() => Math.random() - 0.5).slice(0, n);
+  const imgs = [...SCRAP_IMGS].sort(() => Math.random() - 0.5).slice(0, n);
+  chosen.forEach((sp, i) => {
+    const img = document.createElement('img');
+    img.src = imgs[i]; img.className = 'scrap-img'; img.alt = '';
+    img.setAttribute('aria-hidden', 'true');
+    img.onerror = () => img.remove();
+    img.style.width = sp.width;
+    img.style.animationDelay = sp.delay;
+    img.style.setProperty('--sr', sp.rot);
+    if (sp.top)    img.style.top    = sp.top;
+    if (sp.bottom) img.style.bottom = sp.bottom;
+    if (sp.left)   img.style.left   = sp.left;
+    if (sp.right)  img.style.right  = sp.right;
+    el.appendChild(img);
+  });
+}
+
+function scatterImages() {
+  const count = 1 + Math.floor(Math.random() * 3);
+  const imgs  = [...SCRAP_IMGS].sort(() => Math.random() - 0.5).slice(0, count);
+  // gwarantuj unikalny kontener per obraz
+  const usedSels = new Set();
+  const spots = [...SCRAP_SPOTS]
+    .sort(() => Math.random() - 0.5)
+    .filter(sp => { if (usedSels.has(sp.sel)) return false; usedSels.add(sp.sel); return true; })
+    .slice(0, count);
+
+  imgs.forEach((src, i) => {
+    if (!spots[i]) return;
+    const sp = spots[i];
+    const container = document.querySelector(sp.sel);
+    if (!container) return;
+    const img = document.createElement('img');
+    img.src   = src;
+    img.className = 'scrap-img';
+    img.alt   = '';
+    img.setAttribute('aria-hidden', 'true');
+    img.onerror = () => img.remove();
+    img.style.width          = sp.width;
+    img.style.animationDelay = sp.delay;
+    img.style.setProperty('--sr', sp.rot);
+    if (sp.top)    img.style.top    = sp.top;
+    if (sp.bottom) img.style.bottom = sp.bottom;
+    if (sp.left)   img.style.left   = sp.left;
+    if (sp.right)  img.style.right  = sp.right;
+    container.appendChild(img);
+  });
+}
+
+/* ============================================================
+   PREVIEW CARD — rotating profiles on landing
+   ============================================================ */
+const previewData = [
+  { idx: 0, accent: '#6b38d4', dims: { CONV: 85, BUILD: 20, SYS: 40, ETHIC: 30, IMMERSE: 10 } },
+  { idx: 1, accent: '#a43073', dims: { CONV: 50, BUILD: 60, SYS: 65, ETHIC: 20, IMMERSE: 15 } },
+  { idx: 4, accent: '#6366F1', dims: { CONV: 45, BUILD: 10, SYS: 55, ETHIC: 90, IMMERSE:  5 } },
+  { idx: 5, accent: '#d97706', dims: { CONV: 20, BUILD: 60, SYS: 20, ETHIC: 15, IMMERSE: 95 } },
+];
+const previewDimNames = {
+  CONV: 'Conversational', BUILD: 'Technical', SYS: 'Systems', ETHIC: 'Ethics', IMMERSE: 'Immersive',
+};
+
+let previewIdx = 0;
+
+function rotatePreview() {
+  const data  = previewData[previewIdx % previewData.length];
+  const role  = roles[data.idx];
+  const lang  = state.lang;
+  const t     = i18n[lang];
+  const el    = document.getElementById('preview-profile');
+  if (!el || !role) return;
+
+  el.classList.add('fade-out');
+  setTimeout(() => {
+    const card = document.getElementById('preview-card');
+    if (card) card.style.setProperty('--preview-accent', data.accent);
+
+    const chips = role.chips.slice(0, 3).map(c => `<span class="chip">${c}</span>`).join('');
+    const dimsHtml = Object.entries(data.dims).map(([d, pct]) =>
+      `<div class="preview-dim-row">
+        <span class="preview-dim-label">${previewDimNames[d]}</span>
+        <div class="preview-dim-track">
+          <div class="preview-dim-fill" style="width:0" data-target="${pct}%"></div>
+        </div>
+      </div>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="preview-eyebrow">${t['result.eyebrow'] || 'Twoja przyszłość to:'}</div>
+      <div class="preview-role-name">${role.name[lang]}</div>
+      <div class="preview-tagline">${role.desc[lang]}</div>
+      <div class="preview-chips">${chips}</div>
+      <div class="preview-dims">${dimsHtml}</div>
+    `;
+    el.classList.remove('fade-out');
+
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.preview-dim-fill').forEach(f => { f.style.width = f.dataset.target; });
+    });
+
+    previewIdx++;
+  }, 360);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+setLang(state.lang);
+renderRoles();
+preloadScrapImgs().then(() => scatterImages());
+rotatePreview();
+setInterval(rotatePreview, 3400);
+
+document.querySelectorAll('.stat-n-inline').forEach(el => {
+  countUp(el, el.textContent.trim());
+});
+</script>
+</body>
+</html>

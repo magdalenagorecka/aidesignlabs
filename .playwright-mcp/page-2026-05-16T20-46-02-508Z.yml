@@ -1,0 +1,49 @@
+- generic [active] [ref=e1]:
+  - dialog "Zanim zaczniesz":
+    - generic:
+      - generic: WYNIK NA EMAIL
+      - heading "Zanim zaczniesz" [level=2]
+      - paragraph: Podaj adres e-mail - wynik quizu trafi prosto do skrzynki. Możesz też zapisać się do newslettera o przyszłości designu.
+      - generic:
+        - generic: Adres e-mail
+        - textbox "Adres e-mail":
+          - /placeholder: twoj@email.pl
+          - text: test@test.pl
+      - generic:
+        - checkbox "Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI"
+        - generic: Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI
+      - button "Przejdź do quizu"
+      - generic:
+        - button "Pomiń, zacznij bez maila"
+  - generic [ref=e122]:
+    - navigation [ref=e123]:
+      - generic [ref=e125]:
+        - link "Jakim AI Designerem będziesz?" [ref=e126] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e127]: Jakim AI Designerem będziesz?
+        - group "Wybor jezyka" [ref=e128]:
+          - button "PL" [ref=e129] [cursor=pointer]
+          - button "EN" [ref=e130] [cursor=pointer]
+    - generic [ref=e132]:
+      - generic [ref=e194]:
+        - generic [ref=e195]: PYTANIE 3 Z 10
+        - generic [ref=e196]: 20%
+      - generic [ref=e199]: SATYSFAKCJA Z PRACY
+      - paragraph [ref=e200]: Jakie zadania w procesie projektowym sprawiają Ci największą satysfakcję?
+      - generic [ref=e201]:
+        - button "◇ Interakcje i rozmowy Projektowanie dialogów, obsługi błędów i tonu komunikacji z użytkownikiem" [ref=e202] [cursor=pointer]:
+          - generic [ref=e203]: ◇
+          - generic [ref=e204]: Interakcje i rozmowy
+          - generic [ref=e205]: Projektowanie dialogów, obsługi błędów i tonu komunikacji z użytkownikiem
+        - button "◈ Systemy i prototypy Budowanie działających prototypów i systemów komponentów" [ref=e206] [cursor=pointer]:
+          - generic [ref=e207]: ◈
+          - generic [ref=e208]: Systemy i prototypy
+          - generic [ref=e209]: Budowanie działających prototypów i systemów komponentów
+        - button "◉ Strategia i etyka Kształtowanie kierunku produktu, governance i zasad odpowiedzialnej AI" [ref=e210] [cursor=pointer]:
+          - generic [ref=e211]: ◉
+          - generic [ref=e212]: Strategia i etyka
+          - generic [ref=e213]: Kształtowanie kierunku produktu, governance i zasad odpowiedzialnej AI
+      - generic [ref=e214]:
+        - button "Wstecz" [ref=e215] [cursor=pointer]
+        - button "Dalej" [disabled] [ref=e216]
+      - paragraph [ref=e217]: System dynamicznie dostosowuje kolejne pytania do Twojego profilu

@@ -1,0 +1,49 @@
+- generic [ref=e1]:
+  - dialog "Zanim zaczniesz":
+    - generic:
+      - generic: WYNIK NA EMAIL
+      - heading "Zanim zaczniesz" [level=2]
+      - paragraph: Podaj adres e-mail - wynik quizu trafi prosto do skrzynki. Możesz też zapisać się do newslettera o przyszłości designu.
+      - generic:
+        - generic: Adres e-mail
+        - textbox "Adres e-mail":
+          - /placeholder: twoj@email.pl
+          - text: test@test.pl
+      - generic:
+        - checkbox "Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI"
+        - generic: Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI
+      - button "Przejdź do quizu"
+      - generic:
+        - button "Pomiń, zacznij bez maila"
+  - generic [ref=e122]:
+    - navigation [ref=e123]:
+      - generic [ref=e125]:
+        - link "Jakim AI Designerem będziesz?" [ref=e126] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e127]: Jakim AI Designerem będziesz?
+        - group "Wybor jezyka" [ref=e128]:
+          - button "PL" [ref=e129] [cursor=pointer]
+          - button "EN" [ref=e130] [cursor=pointer]
+    - generic [ref=e132]:
+      - generic [ref=e163]:
+        - generic [ref=e164]: PYTANIE 2 Z 10
+        - generic [ref=e165]: 10%
+      - generic [ref=e168]: TOŻSAMOŚĆ ZAWODOWA
+      - paragraph [ref=e169]: Które zdanie rezonuje z Tobą najsilniej?
+      - generic [ref=e170]:
+        - button "AI musi brzmieć jak człowiek i rozumieć kontekst rozmowy" [ref=e171] [cursor=pointer]:
+          - generic [ref=e173]: AI musi brzmieć jak człowiek i rozumieć kontekst rozmowy
+        - button "Klikam Deploy i widzę, jak mój prototyp żyje na produkcji" [active] [ref=e174] [cursor=pointer]:
+          - generic [ref=e176]: Klikam Deploy i widzę, jak mój prototyp żyje na produkcji
+        - button "Mój projekt zmienił retencję i NPS o 20%" [ref=e177] [cursor=pointer]:
+          - generic [ref=e179]: Mój projekt zmienił retencję i NPS o 20%
+        - button "System działa dla 50 różnych typów użytkowników naraz" [ref=e180] [cursor=pointer]:
+          - generic [ref=e182]: System działa dla 50 różnych typów użytkowników naraz
+        - button "Użytkownik ma pełną kontrolę i rozumie, co robi AI" [ref=e183] [cursor=pointer]:
+          - generic [ref=e185]: Użytkownik ma pełną kontrolę i rozumie, co robi AI
+        - button "Świat fizyczny i cyfrowy przenikają się w moim projekcie" [ref=e186] [cursor=pointer]:
+          - generic [ref=e188]: Świat fizyczny i cyfrowy przenikają się w moim projekcie
+      - generic [ref=e189]:
+        - button "Wstecz" [ref=e190] [cursor=pointer]
+        - button "Dalej" [ref=e191] [cursor=pointer]
+      - paragraph [ref=e192]: System dynamicznie dostosowuje kolejne pytania do Twojego profilu

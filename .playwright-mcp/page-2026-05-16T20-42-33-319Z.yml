@@ -1,0 +1,122 @@
+- generic [ref=e1]:
+  - dialog "Zanim zaczniesz" [ref=e108]:
+    - generic [ref=e109]:
+      - generic [ref=e110]: WYNIK NA EMAIL
+      - heading "Zanim zaczniesz" [level=2] [ref=e111]
+      - paragraph [ref=e112]: Podaj adres e-mail - wynik quizu trafi prosto do skrzynki. Możesz też zapisać się do newslettera o przyszłości designu.
+      - generic [ref=e113]:
+        - generic [ref=e114]: Adres e-mail
+        - textbox "Adres e-mail" [active] [ref=e115]:
+          - /placeholder: twoj@email.pl
+      - generic [ref=e116] [cursor=pointer]:
+        - checkbox "Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI" [ref=e117]
+        - generic [ref=e118]: Zapisz mnie do newslettera - bądź na bieżąco z przyszłością designu i AI
+      - button "Przejdź do quizu" [disabled] [ref=e119]
+      - button "Pomiń, zacznij bez maila" [ref=e121] [cursor=pointer]
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "Jakim AI Designerem będziesz? Quiz diagnostyczny - horyzont 2030" [ref=e6] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e7]: Jakim AI Designerem będziesz?
+          - generic [ref=e8]: Quiz diagnostyczny - horyzont 2030
+        - group "Wybor jezyka" [ref=e9]:
+          - button "PL" [ref=e10] [cursor=pointer]
+          - button "EN" [ref=e11] [cursor=pointer]
+    - main [ref=e12]:
+      - generic [ref=e15]:
+        - generic [ref=e18]: HORYZONT 2030
+        - heading "Odkryj swoją rolę w erze AI" [level=1] [ref=e19]:
+          - text: Odkryj swoją rolę
+          - generic [ref=e20]: w erze AI
+        - paragraph [ref=e21]: 10 pytań. 7 zawodów przyszłości. Wynik oparty na badaniach WEF, Autodesk i Figma - bo Twoja kariera zasługuje na dane, nie na zgadywankę.
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]: 45%
+            - generic [ref=e25]:
+              - text: więcej ról
+              - text: UX do 2030
+          - generic [ref=e26]:
+            - generic [ref=e27]: "#8"
+            - generic [ref=e28]:
+              - text: lista WEF
+              - text: rosną zawody
+          - generic [ref=e29]:
+            - generic [ref=e30]: 91%
+            - generic [ref=e31]:
+              - text: designerów
+              - text: AI przyspiesza
+        - generic [ref=e32]:
+          - button "Rozpocznij quiz" [ref=e33] [cursor=pointer]
+          - link "Zobacz zawody przyszłości" [ref=e34] [cursor=pointer]:
+            - /url: "#roles"
+      - generic [ref=e36]:
+        - generic [ref=e37]: 7 ZAWODÓW PRZYSZŁOŚCI
+        - heading "Która ścieżka jest Twoja?" [level=2] [ref=e38]
+        - paragraph [ref=e39]: Przejrzyj role, które według badań WEF, Autodesk i Figma będą rosły najszybciej do 2030 roku.
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]: "01"
+            - heading "AI Interaction Designer" [level=3] [ref=e43]
+            - paragraph [ref=e44]: Projektuje dialogi, agenty i systemy konwersacyjne. Definiuje ton, charakter i logikę interakcji człowieka z AI.
+            - generic [ref=e45]:
+              - generic [ref=e46]: CONVERSATIONAL AI
+              - generic [ref=e47]: DIALOG DESIGN
+              - generic [ref=e48]: LLM PATTERNS
+          - generic [ref=e49]:
+            - generic [ref=e50]: "02"
+            - heading "AI Product Designer" [level=3] [ref=e51]
+            - paragraph [ref=e52]: Odpowiada za funkcje AI w produkcie - od discovery po iteracje po wdrożeniu. Definiuje gdzie AI realnie daje wartość.
+            - generic [ref=e53]:
+              - generic [ref=e54]: AI FEATURE DESIGN
+              - generic [ref=e55]: DISCOVERY
+              - generic [ref=e56]: PRODUCT METRICS
+          - generic [ref=e57]:
+            - generic [ref=e58]: "03"
+            - heading "Design Technologist" [level=3] [ref=e59]
+            - paragraph [ref=e60]: Łączy design z implementacją. Buduje działające prototypy i systemy komponentów, korzystając z AI jako narzędzia.
+            - generic [ref=e61]:
+              - generic [ref=e62]: AI PROTOTYPING
+              - generic [ref=e63]: NO-CODE BUILD
+              - generic [ref=e64]: FRONT-END
+          - generic [ref=e65]:
+            - generic [ref=e66]: "04"
+            - heading "AI UX Strategist" [level=3] [ref=e67]
+            - paragraph [ref=e68]: Kształtuje AI roadmapy i strategie produktowe na poziomie organizacji. Łączy perspektywę biznesu, designu i technologii.
+            - generic [ref=e69]:
+              - generic [ref=e70]: AI STRATEGY
+              - generic [ref=e71]: GOVERNANCE
+              - generic [ref=e72]: STAKEHOLDER MGT
+          - generic [ref=e73]:
+            - generic [ref=e74]: "05"
+            - heading "AI Ethics UX Consultant" [level=3] [ref=e75]
+            - paragraph [ref=e76]: Audytuje systemy AI pod kątem fairness i zgodności z EU AI Act. Tworzy wytyczne etyczne dla zespołów produktowych.
+            - generic [ref=e77]:
+              - generic [ref=e78]: BIAS TESTING
+              - generic [ref=e79]: EU AI ACT
+              - generic [ref=e80]: TRANSPARENCY UX
+          - generic [ref=e81]:
+            - generic [ref=e82]: "06"
+            - heading "Immersive Experience Architect" [level=3] [ref=e83]
+            - paragraph [ref=e84]: Tworzy środowiska AR i VR zasilane generatywną AI. Projektuje przestrzenne narracje i interakcje bez tradycyjnych ekranów.
+            - generic [ref=e85]:
+              - generic [ref=e86]: AR/VR DESIGN
+              - generic [ref=e87]: SPATIAL UX
+              - generic [ref=e88]: GENERATIVE 3D
+          - generic [ref=e89]:
+            - generic [ref=e90]: "07"
+            - heading "AI-Augmented Design Leader" [level=3] [ref=e91]
+            - paragraph [ref=e92]: Zarządza transformacją organizacji przez AI. Buduje interdyscyplinarne zespoły i kształtuje kulturę projektowania z AI.
+            - generic [ref=e93]:
+              - generic [ref=e94]: AI LEADERSHIP
+              - generic [ref=e95]: TEAM BUILDING
+              - generic [ref=e96]: ORG TRANSFORMATION
+      - generic [ref=e98]:
+        - generic [ref=e99]: QUIZ DIAGNOSTYCZNY
+        - heading "Gotowa sprawdzić, gdzie pasujesz?" [level=2] [ref=e100]
+        - paragraph [ref=e101]: 10 pytań, 5 minut, konkretna odpowiedź - i plan kompetencyjny na 3 lata.
+        - button "Rozpocznij quiz" [ref=e102] [cursor=pointer]
+    - contentinfo [ref=e103]:
+      - generic [ref=e105]:
+        - generic [ref=e106]: AI Designer Quiz
+        - generic [ref=e107]: "Źródła: WEF Future of Jobs 2025 - Autodesk AI Jobs Report 2025 - Figma State of the Designer 2026"
