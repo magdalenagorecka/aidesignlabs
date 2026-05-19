@@ -7,7 +7,16 @@
 <meta name="description" content="Jedyne narzędzie diagnostyczne dla designerów oparte na danych WEF, Autodesk i Figma. 10 pytań, konkretny profil roli i plan kompetencyjny na 3 lata.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Caveat:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Playfair Display + Plus Jakarta Sans — async, non-render-blocking -->
+<link rel="preload" as="style"
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,500&display=swap"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,500&display=swap" rel="stylesheet"></noscript>
+<!-- Caveat + JetBrains Mono — dekoracyjne, display=optional (brak CLS) -->
+<link rel="preload" as="style"
+  href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=optional"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=optional" rel="stylesheet"></noscript>
 <style>
 
 /* ============================================================
@@ -451,6 +460,7 @@ body {
   box-shadow: 0 0 6px var(--neon-lime-glow), 0 0 12px var(--neon-lime-glow);
   flex-shrink: 0;
   animation: blink 2.4s ease-in-out infinite;
+  will-change: opacity;
 }
 
 @keyframes blink {
@@ -535,6 +545,7 @@ body {
   font-size: 24px;
   font-weight: 700;
   color: var(--primary);
+  display: inline-block;
   min-width: 50px;
   line-height: 1;
   text-shadow: 0 0 14px rgba(112, 85, 168, 0.4);
@@ -556,6 +567,7 @@ body {
   filter: drop-shadow(0 8px 22px rgba(30, 24, 18, 0.18));
   user-select: none;
   animation: scrapFadeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
 }
 
 @keyframes scrapFadeIn {
@@ -614,6 +626,7 @@ body {
   border: 1px solid rgba(112, 85, 168, 0.18);
   border-radius: var(--r-md);
   padding: 24px 22px;
+  min-height: 220px;
   box-shadow:
     0 16px 48px rgba(30, 24, 18, 0.1),
     0 4px 14px rgba(30, 24, 18, 0.06);
@@ -3038,12 +3051,11 @@ let SCRAP_IMGS = [];
 function preloadScrapImgs() {
   const candidates = Array.from({ length: 20 }, (_, i) => `assets/png/${i + 1}.png`);
   return Promise.all(
-    candidates.map(src => new Promise(resolve => {
-      const t = new Image();
-      t.onload  = () => resolve(src);
-      t.onerror = () => resolve(null);
-      t.src = src;
-    }))
+    candidates.map(src =>
+      fetch(src, { method: 'HEAD' })
+        .then(r => r.ok ? src : null)
+        .catch(() => null)
+    )
   ).then(results => { SCRAP_IMGS = results.filter(Boolean); });
 }
 
