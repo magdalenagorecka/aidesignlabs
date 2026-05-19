@@ -3037,18 +3037,7 @@ function countUp(el, targetStr, durationMs) {
 /* ============================================================
    SCRAPBOOK IMAGES — scattered cut-outs on landing
    ============================================================ */
-let SCRAP_IMGS = [];
-
-function preloadScrapImgs() {
-  const candidates = Array.from({ length: 20 }, (_, i) => `assets/png/${i + 1}.png`);
-  return Promise.all(
-    candidates.map(src =>
-      fetch(src, { method: 'HEAD' })
-        .then(r => r.ok ? src : null)
-        .catch(() => null)
-    )
-  ).then(results => { SCRAP_IMGS = results.filter(Boolean); });
-}
+const SCRAP_IMGS = ['assets/png/7.png','assets/png/8.png','assets/png/9.png','assets/png/10.png','assets/png/11.png'];
 
 // spoty mobilne — w obszarach paddingu, nie na tekście (jedno PNG, małe)
 const MOBILE_LANDING_SPOTS = [
@@ -3199,7 +3188,7 @@ function rotatePreview() {
    ============================================================ */
 setLang(state.lang);
 renderRoles();
-window.addEventListener('load', () => preloadScrapImgs().then(() => scatterImages()));
+scatterImages();
 rotatePreview();
 setInterval(rotatePreview, 3400);
 
