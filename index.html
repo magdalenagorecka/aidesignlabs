@@ -3199,7 +3199,7 @@ function rotatePreview() {
    ============================================================ */
 setLang(state.lang);
 renderRoles();
-preloadScrapImgs().then(() => scatterImages());
+window.addEventListener('load', () => preloadScrapImgs().then(() => scatterImages()));
 rotatePreview();
 setInterval(rotatePreview, 3400);
 
