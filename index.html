@@ -563,8 +563,8 @@ body {
   to   { opacity: 1; transform: scale(1)    rotate(var(--sr, 0deg)); }
 }
 
-@media (max-width: 640px) {
-  .scrap-img { width: 110px !important; }
+@media (max-width: 767px) {
+  .scrap-img { width: 85px !important; }
 }
 
 /* Scrapbook doodles */
@@ -959,6 +959,7 @@ body {
   border-bottom: none;
   padding: 56px 0;
   text-align: center;
+  position: relative;
 }
 
 .cta-band-label {
@@ -1910,7 +1911,7 @@ body {
   <nav class="nav" id="quiz-nav">
     <div class="container">
       <div class="nav-inner">
-        <a href="#" class="nav-logo" onclick="return false;">
+        <a href="#" class="nav-logo" onclick="navigateHome(); return false;">
           <span class="nav-logo-main" data-i18n="nav.title">Jakim AI Designerem będziesz?</span>
         </a>
         <div class="lang-toggle" role="group" aria-label="Wybor jezyka">
@@ -1932,7 +1933,7 @@ body {
   <nav class="nav" id="result-nav">
     <div class="container">
       <div class="nav-inner">
-        <a href="#" class="nav-logo" onclick="return false;">
+        <a href="#" class="nav-logo" onclick="navigateHome(); return false;">
           <span class="nav-logo-main" data-i18n="nav.title">Jakim AI Designerem będziesz?</span>
         </a>
         <div class="lang-toggle" role="group" aria-label="Wybor jezyka">
@@ -1951,8 +1952,7 @@ body {
 /* ============================================================
    CONFIGURATION
    ============================================================ */
-const MAILERLITE_API_KEY = 'YOUR_MAILERLITE_API_KEY';
-const MAILERLITE_GROUP_ID = 'YOUR_GROUP_ID';
+const MAILERLITE_FORM_URL = 'https://assets.mailerlite.com/jsonp/1549559/forms/187873152558171698/subscribe';
 
 /* ============================================================
    APP STATE
@@ -2661,19 +2661,15 @@ function launchQuiz() {
   }
 
   closeModal();
-  // TODO: replace with quiz screen transition
   navigateToQuiz();
 }
 
 async function sendToMailerLite(email) {
-  await fetch('https://connect.mailerlite.com/api/subscribers', {
-    method: 'POST',
-    headers: {
-      'Content-Type':  'application/json',
-      'Authorization': `Bearer ${MAILERLITE_API_KEY}`,
-    },
-    body: JSON.stringify({ email, groups: [MAILERLITE_GROUP_ID] }),
-  });
+  const data = new FormData();
+  data.append('fields[email]', email);
+  data.append('ml-submit', '1');
+  data.append('anticsrf', 'true');
+  await fetch(MAILERLITE_FORM_URL, { method: 'POST', body: data });
 }
 
 /* ============================================================
@@ -2752,7 +2748,7 @@ function navigateToQuiz() {
   document.getElementById('screen-result').style.display = 'none';
   document.getElementById('screen-quiz').style.display = 'flex';
   window.scrollTo(0, 0);
-  scatterInto('#screen-quiz', QUIZ_SPOTS);
+  if (window.innerWidth >= 768) scatterInto('#screen-quiz', QUIZ_SPOTS);
   renderCurrentQuestion();
 }
 
@@ -2952,7 +2948,7 @@ function renderResult(result) {
     });
   });
 
-  scatterInto('#screen-result', RESULT_SPOTS);
+  if (window.innerWidth >= 768) scatterInto('#screen-result', RESULT_SPOTS);
 }
 
 function shareResult() {
@@ -2973,6 +2969,13 @@ function shareResult() {
 
 function restartQuiz() {
   lastResult = null;
+  document.getElementById('screen-result').style.display = 'none';
+  document.getElementById('screen-landing').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function navigateHome() {
+  document.getElementById('screen-quiz').style.display = 'none';
   document.getElementById('screen-result').style.display = 'none';
   document.getElementById('screen-landing').style.display = 'block';
   window.scrollTo(0, 0);
@@ -3044,6 +3047,12 @@ function preloadScrapImgs() {
   ).then(results => { SCRAP_IMGS = results.filter(Boolean); });
 }
 
+// spoty mobilne — w obszarach paddingu, nie na tekście (jedno PNG, małe)
+const MOBILE_LANDING_SPOTS = [
+  { sel: '.hero',     bottom: '16px', right: '-16px', width: '88px', rot:  '16deg', delay: '0.2s' },
+  { sel: '.cta-band', bottom: '16px', right: '-12px', width: '78px', rot: '-13deg', delay: '0.1s' },
+];
+
 // landing page spots — jeden kontener per spot, żeby nie zachodziły na siebie
 const SCRAP_SPOTS = [
   { sel: '.hero',     top:  '80px',   right: '-20px',  width: '200px', rot:  '18deg', delay: '0.1s'  },
@@ -3091,6 +3100,11 @@ function scatterInto(containerSel, spots, count) {
 }
 
 function scatterImages() {
+  if (window.innerWidth < 768) {
+    const spot = MOBILE_LANDING_SPOTS[Math.floor(Math.random() * MOBILE_LANDING_SPOTS.length)];
+    scatterInto(spot.sel, [spot], 1);
+    return;
+  }
   const count = 1 + Math.floor(Math.random() * 3);
   const imgs  = [...SCRAP_IMGS].sort(() => Math.random() - 0.5).slice(0, count);
   // gwarantuj unikalny kontener per obraz
